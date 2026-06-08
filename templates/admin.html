@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Election Admin</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:sans-serif;
+}
+
+body{
+    background:#111827;
+    color:white;
+}
+
+.container{
+    padding:20px;
+}
+
+header{
+    margin-bottom:20px;
+}
+
+.main{
+    display:flex;
+    gap:20px;
+}
+
+aside{
+    width:300px;
+
+    background:#1f2937;
+
+    border-radius:10px;
+
+    padding:15px;
+
+    max-height:80vh;
+
+    overflow-y:auto;
+}
+
+section{
+    flex:1;
+
+    background:#1f2937;
+
+    border-radius:10px;
+
+    padding:20px;
+}
+
+.post-btn{
+
+    width:100%;
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    background:#374151;
+
+    color:white;
+}
+
+.post-btn:hover{
+
+    background:#4b5563;
+}
+
+.candidate-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+    background:#374151;
+
+    border-radius:8px;
+}
+
+.actions button{
+
+    margin-left:5px;
+}
+
+.add-box{
+
+    margin-top:20px;
+
+    display:flex;
+
+    gap:10px;
+}
+
+input{
+
+    flex:1;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:8px;
+}
+
+button{
+
+    padding:10px 15px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Student Council Admin Panel</h1>
+    </header>
+
+    <div class="main">
+
+        <aside>
+
+            <h2>Posts</h2>
+
+            <div id="posts"></div>
+
+        </aside>
+
+        <section>
+
+            <h2 id="selectedPostTitle">
+                Select a Post
+            </h2>
+
+            <div id="candidates"></div>
+
+            <div class="add-box">
+
+                <input
+                    type="text"
+                    id="candidateName"
+                    placeholder="Candidate Name"
+                >
+
+                <button onclick="addCandidate()">
+                    Add Candidate
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+<script>
+
+let selectedPost = null;
+
+async function loadPosts() {
+
+    const response = await fetch("/admin/posts");
+
+    const posts = await response.json();
+
+    const container =
+        document.getElementById("posts");
+
+    container.innerHTML = "";
+
+    posts.forEach(post => {
+        const btn =
+        document.createElement("button");
+
+        btn.className = "post-btn";
+
+        btn.innerText = post.title;
+
+        btn.onclick = () => {
+            selectedPost = post.id;
+            loadCandidates(post.id);
+        };
+
+        container.appendChild(btn);
+
+        container.appendChild(
+            document.createElement("br")
+        );
+
+    });
+
+}
+
+async function loadCandidates(postId) {
+
+    const response =
+        await fetch(
+            `/admin/candidates/${postId}`
+        );
+
+    const candidates =
+        await response.json();
+
+    const container =
+        document.getElementById("candidates");
+
+    container.innerHTML = "";
+
+    candidates.forEach(candidate => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "candidate-row";
+
+        div.innerHTML = `
+            <span>${candidate.name}</span>
+
+            <div class="actions">
+
+                <button
+                    onclick="editCandidate(${candidate.id})">
+                    Edit
+                </button>
+
+                <button
+                    onclick="deleteCandidate(${candidate.id})">
+                    Delete
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+async function addCandidate() {
+
+    if (!selectedPost) {
+
+        alert(
+            "Select a post first"
+        );
+
+        return;
+    }
+
+    const name =
+        document.getElementById(
+            "candidateName"
+        ).value;
+
+    await fetch(
+        "/admin/candidate",
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                "application/json"
+            },
+
+            body: JSON.stringify({
+                name: name,
+                post_id: selectedPost
+            })
+        }
+    );
+
+    loadCandidates(selectedPost);
+
+}
+
+async function deleteCandidate(id){
+
+    await fetch(
+        `/admin/candidate/${id}`,
+        {
+            method:"DELETE"
+        }
+    );
+
+    loadCandidates(selectedPost);
+}
+
+async function editCandidate(id){
+
+    const name =
+        prompt(
+            "New candidate name:"
+        );
+
+    if(!name) return;
+
+    await fetch(
+        `/admin/candidate/${id}`,
+        {
+            method:"PUT",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+                name:name
+            })
+        }
+    );
+
+    loadCandidates(selectedPost);
+}
+
+loadPosts();
+
+</script>
+
+</body>
+</html>

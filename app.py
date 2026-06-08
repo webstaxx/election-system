@@ -10,6 +10,19 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
 
 from models import *
+from routes.api import api_bp
+from routes.admin import admin_bp
+from flask import Flask, render_template
+
+app.register_blueprint(
+    api_bp,
+    url_prefix="/api"
+)
+
+app.register_blueprint(
+    admin_bp,
+    url_prefix="/admin"
+)
 
 @app.route("/")
 def home():
@@ -21,6 +34,10 @@ def home():
 def init_db():
     db.create_all()
     return "Database Created"
+
+@app.route("/admin-panel")
+def admin_panel():
+    return render_template("admin.html")
 
 if __name__ == "__main__":
     app.run(
