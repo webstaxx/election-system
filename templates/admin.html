@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
 <head>
-    <title>Election Admin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Election Admin Panel</title>
 
 <style>
 
@@ -9,20 +12,25 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:sans-serif;
+    font-family:Segoe UI, sans-serif;
 }
 
 body{
     background:#111827;
     color:white;
+    min-height:100vh;
 }
 
 .container{
-    padding:20px;
+    padding:25px;
 }
 
 header{
     margin-bottom:20px;
+}
+
+header h1{
+    font-size:2rem;
 }
 
 .main{
@@ -31,163 +39,194 @@ header{
 }
 
 aside{
-    width:300px;
-
+    width:320px;
     background:#1f2937;
-
-    border-radius:10px;
-
-    padding:15px;
-
-    max-height:80vh;
-
+    border-radius:12px;
+    padding:20px;
+    max-height:85vh;
     overflow-y:auto;
 }
 
 section{
     flex:1;
-
     background:#1f2937;
-
-    border-radius:10px;
-
+    border-radius:12px;
     padding:20px;
 }
 
+h2{
+    margin-bottom:15px;
+}
+
 .post-btn{
-
     width:100%;
-
+    text-align:left;
     padding:12px;
-
-    margin-bottom:10px;
-
     border:none;
-
     border-radius:8px;
-
-    cursor:pointer;
-
+    margin-bottom:10px;
     background:#374151;
-
     color:white;
+    cursor:pointer;
+    transition:0.2s;
 }
 
 .post-btn:hover{
-
     background:#4b5563;
 }
 
-.candidate-row{
+.selected-post{
+    border:2px solid #60a5fa;
+}
 
+.post-header{
     display:flex;
-
     justify-content:space-between;
-
     align-items:center;
+    margin-bottom:20px;
+}
 
-    padding:12px;
+#postStatusBadge{
+    padding:8px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
 
-    margin-bottom:10px;
-
+.candidate-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
     background:#374151;
-
+    padding:12px;
     border-radius:8px;
+    margin-bottom:10px;
 }
 
 .actions button{
-
     margin-left:5px;
 }
 
+button{
+    border:none;
+    border-radius:8px;
+    padding:10px 14px;
+    cursor:pointer;
+}
+
 .add-box{
-
     margin-top:20px;
-
     display:flex;
-
     gap:10px;
 }
 
 input{
-
     flex:1;
-
     padding:10px;
-
     border:none;
-
     border-radius:8px;
 }
 
-button{
+.post-controls{
+    margin-top:20px;
+}
 
-    padding:10px 15px;
+#togglePostBtn{
+    background:#f59e0b;
+    color:white;
+}
 
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
+#togglePostBtn:hover{
+    opacity:0.9;
 }
 
 </style>
+
 </head>
+
 <body>
 
 <div class="container">
 
-    <header>
-        <h1>Student Council Admin Panel</h1>
-    </header>
+<header>
+    <h1>Student Council Election Admin Panel</h1>
+</header>
 
-    <div class="main">
+<div class="main">
 
-        <aside>
+```
+<aside>
 
-            <h2>Posts</h2>
+    <h2>Posts</h2>
 
-            <div id="posts"></div>
+    <div id="posts"></div>
 
-        </aside>
+</aside>
 
-        <section>
+<section>
 
-            <h2 id="selectedPostTitle">
-                Select a Post
-            </h2>
+    <div class="post-header">
 
-            <div id="candidates"></div>
+        <h2 id="selectedPostTitle">
+            Select a Post
+        </h2>
 
-            <div class="add-box">
-
-                <input
-                    type="text"
-                    id="candidateName"
-                    placeholder="Candidate Name"
-                >
-
-                <button onclick="addCandidate()">
-                    Add Candidate
-                </button>
-
-            </div>
-
-        </section>
+        <span id="postStatusBadge">
+            -
+        </span>
 
     </div>
+
+    <div id="candidates">
+
+        Select a post to view candidates.
+
+    </div>
+
+    <div class="add-box">
+
+        <input
+            type="text"
+            id="candidateName"
+            placeholder="Candidate Name"
+        >
+
+        <button onclick="addCandidate()">
+            Add Candidate
+        </button>
+
+    </div>
+
+    <div class="post-controls">
+
+        <button
+            id="togglePostBtn"
+            onclick="togglePost()">
+
+            Toggle Active Status
+
+        </button>
+
+    </div>
+
+</section>
+```
+
+</div>
 
 </div>
 
 <script>
 
 let selectedPost = null;
+let selectedPostData = null;
 
-async function loadPosts() {
+async function loadPosts(){
 
-    const response = await fetch("/admin/posts");
+    const response =
+        await fetch("/admin/posts");
 
-    const posts = await response.json();
+    const posts =
+        await response.json();
 
     const container =
         document.getElementById("posts");
@@ -195,29 +234,81 @@ async function loadPosts() {
     container.innerHTML = "";
 
     posts.forEach(post => {
+
         const btn =
-        document.createElement("button");
+            document.createElement("button");
 
-        btn.className = "post-btn";
+        btn.className =
+            "post-btn";
 
-        btn.innerText = post.title;
+        if(
+            selectedPost === post.id
+        ){
+            btn.classList.add(
+                "selected-post"
+            );
+        }
+
+        btn.innerText =
+            post.title;
+
+        if(!post.active){
+
+            btn.style.opacity = "0.5";
+
+            btn.innerText +=
+                " (Inactive)";
+        }
 
         btn.onclick = () => {
-            selectedPost = post.id;
-            loadCandidates(post.id);
+
+            selectedPost =
+                post.id;
+
+            selectedPostData =
+                post;
+
+            document
+                .getElementById(
+                    "selectedPostTitle"
+                )
+                .innerText =
+                post.title;
+
+            const badge =
+                document
+                .getElementById(
+                    "postStatusBadge"
+                );
+
+            badge.innerText =
+                post.active
+                ? "ACTIVE"
+                : "INACTIVE";
+
+            badge.style.background =
+                post.active
+                ? "#22c55e"
+                : "#ef4444";
+
+            loadCandidates(
+                post.id
+            );
+
+            loadPosts();
         };
 
-        container.appendChild(btn);
-
         container.appendChild(
-            document.createElement("br")
+            btn
         );
 
     });
 
 }
 
-async function loadCandidates(postId) {
+async function loadCandidates(
+    postId
+){
 
     const response =
         await fetch(
@@ -228,44 +319,54 @@ async function loadCandidates(postId) {
         await response.json();
 
     const container =
-        document.getElementById("candidates");
+        document.getElementById(
+            "candidates"
+        );
 
     container.innerHTML = "";
 
-    candidates.forEach(candidate => {
+    candidates.forEach(
+        candidate => {
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        div.className = "candidate-row";
+        div.className =
+            "candidate-row";
 
         div.innerHTML = `
-            <span>${candidate.name}</span>
+            <span>
+                ${candidate.name}
+            </span>
 
             <div class="actions">
 
                 <button
-                    onclick="editCandidate(${candidate.id})">
+                onclick="editCandidate(${candidate.id})">
                     Edit
                 </button>
 
                 <button
-                    onclick="deleteCandidate(${candidate.id})">
+                onclick="deleteCandidate(${candidate.id})">
                     Delete
                 </button>
 
             </div>
         `;
 
-        container.appendChild(div);
+        container.appendChild(
+            div
+        );
 
     });
 
 }
 
-async function addCandidate() {
+async function addCandidate(){
 
-    if (!selectedPost) {
+    if(!selectedPost){
 
         alert(
             "Select a post first"
@@ -275,51 +376,53 @@ async function addCandidate() {
     }
 
     const name =
-        document.getElementById(
+        document
+        .getElementById(
             "candidateName"
         ).value;
+
+    if(!name){
+        return;
+    }
 
     await fetch(
         "/admin/candidate",
         {
-            method: "POST",
+            method:"POST",
 
-            headers: {
+            headers:{
                 "Content-Type":
                 "application/json"
             },
 
-            body: JSON.stringify({
-                name: name,
-                post_id: selectedPost
+            body:JSON.stringify({
+                name:name,
+                post_id:selectedPost
             })
         }
     );
 
-    loadCandidates(selectedPost);
+    document
+        .getElementById(
+            "candidateName"
+        ).value = "";
 
-}
-
-async function deleteCandidate(id){
-
-    await fetch(
-        `/admin/candidate/${id}`,
-        {
-            method:"DELETE"
-        }
+    loadCandidates(
+        selectedPost
     );
 
-    loadCandidates(selectedPost);
 }
 
 async function editCandidate(id){
 
     const name =
         prompt(
-            "New candidate name:"
+            "Enter new name"
         );
 
-    if(!name) return;
+    if(!name){
+        return;
+    }
 
     await fetch(
         `/admin/candidate/${id}`,
@@ -337,7 +440,77 @@ async function editCandidate(id){
         }
     );
 
-    loadCandidates(selectedPost);
+    loadCandidates(
+        selectedPost
+    );
+
+}
+
+async function deleteCandidate(id){
+
+    if(
+        !confirm(
+            "Delete candidate?"
+        )
+    ){
+        return;
+    }
+
+    await fetch(
+        `/admin/candidate/${id}`,
+        {
+            method:"DELETE"
+        }
+    );
+
+    loadCandidates(
+        selectedPost
+    );
+
+}
+
+async function togglePost(){
+
+    if(!selectedPost){
+
+        alert(
+            "Select a post first"
+        );
+
+        return;
+    }
+
+    const response =
+        await fetch(
+            `/admin/post/${selectedPost}/toggle`,
+            {
+                method:"PUT"
+            }
+        );
+
+    const result =
+        await response.json();
+
+    selectedPostData.active =
+        result.active;
+
+    const badge =
+        document.getElementById(
+            "postStatusBadge"
+        );
+
+    badge.innerText =
+        result.active
+        ? "ACTIVE"
+        : "INACTIVE";
+
+    badge.style.background =
+        result.active
+        ? "#22c55e"
+        : "#ef4444";
+
+    loadPosts();
+
 }
 
 loadPosts();
