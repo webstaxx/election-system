@@ -12,6 +12,8 @@ db.init_app(app)
 from models import *
 from routes.api import api_bp
 from routes.admin import admin_bp
+from routes.voting import voting_bp
+
 from flask import Flask, render_template
 
 app.register_blueprint(
@@ -24,11 +26,14 @@ app.register_blueprint(
     url_prefix="/admin"
 )
 
+app.register_blueprint(
+    voting_bp,
+    url_prefix="/vote"
+)
+
 @app.route("/")
 def home():
-    return {
-        "status": "Election System Online"
-    }
+    return render_template("index.html")
 
 @app.route("/init-db")
 def init_db():
@@ -38,6 +43,19 @@ def init_db():
 @app.route("/admin-panel")
 def admin_panel():
     return render_template("admin.html")
+
+@app.route("/results")
+def results_page():
+    return "<h1>Results Coming Soon</h1>"
+
+
+@app.route("/student")
+def student():
+    return render_template("student_vote.html")
+
+@app.route("/teacher")
+def teacher():
+    return render_template("teacher_vote.html")
 
 if __name__ == "__main__":
     app.run(

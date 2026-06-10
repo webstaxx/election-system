@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 
 from extensions import db
-from models import Post, Candidate
+from models import Post, Candidate, Settings
 
 admin_bp = Blueprint(
     "admin",
@@ -198,4 +198,67 @@ def delete_candidate(candidate_id):
 
     return jsonify({
         "success": True
+    })
+
+#=========================================
+# SETTINGS
+#=========================================
+
+@admin_bp.route("/status", methods=["GET"])
+def get_status():
+
+    settings = Settings.query.first()
+
+    if not settings:
+
+        settings = Settings()
+
+        db.session.add(settings)
+        db.session.commit()
+
+    return jsonify({
+        "election_open": settings.election_open,
+        "results_visible": settings.results_visible,
+        "locked": settings.locked,
+        "year": settings.election_year
+    })
+
+@admin_bp.route("/open-election", methods=["PUT"])
+def open_election():
+
+    settings = Settings.query.first()
+
+    if not settings:
+
+        settings = Settings()
+
+        db.session.add(settings)
+
+    settings.election_open = True
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "election_open": True
+    })
+
+@admin_bp.route("/close-election", methods=["PUT"])
+def close_election():
+
+    settings = Settings.query.first()
+
+    if not settings:
+
+        settings = Settings()
+
+        db.session.add(settings)
+
+    settings.election_open = False
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "election_open": False
     })

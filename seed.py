@@ -22,20 +22,20 @@ POSTS = [
     ("Sports Vice Captain", "common", None),
 
     # Agni
-    ("Agni House Captain", "house", "Agni"),
-    ("Agni House Vice Captain", "house", "Agni"),
+    ("Agni House Captain", "house", "agni"),
+    ("Agni House Vice Captain", "house", "agni"),
 
     # Jalam
-    ("Jalam House Captain", "house", "Jalam"),
-    ("Jalam House Vice Captain", "house", "Jalam"),
+    ("Jalam House Captain", "house", "jalam"),
+    ("Jalam House Vice Captain", "house", "jalam"),
 
     # Vayu
-    ("Vayu House Captain", "house", "Vayu"),
-    ("Vayu House Vice Captain", "house", "Vayu"),
+    ("Vayu House Captain", "house", "vayu"),
+    ("Vayu House Vice Captain", "house", "vayu"),
 
     # Prithvi
-    ("Prithvi House Captain", "house", "Prithvi"),
-    ("Prithvi House Vice Captain", "house", "Prithvi")
+    ("Prithvi House Captain", "house", "prithvi"),
+    ("Prithvi House Vice Captain", "house", "prithvi")
 ]
 
 
@@ -47,7 +47,10 @@ with app.app_context():
         print("Posts already exist.")
         exit()
 
-    for order, (title, group_type, house) in enumerate(POSTS, start=1):
+    for order, (title, group_type, house) in enumerate(
+        POSTS,
+        start=1
+    ):
 
         post = Post(
             title=title,
@@ -60,4 +63,6 @@ with app.app_context():
 
     db.session.commit()
 
-    print(f"Inserted {len(POSTS)} posts successfully.")
+    print(
+        f"Inserted {len(POSTS)} posts successfully."
+    )
