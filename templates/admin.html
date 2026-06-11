@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Election Admin Panel</title>
+
+<title>Election Dashboard</title>
 
 <style>
 
@@ -12,7 +14,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI, sans-serif;
+    font-family:Segoe UI,sans-serif;
 }
 
 body{
@@ -22,167 +24,92 @@ body{
 }
 
 .container{
+    max-width:1400px;
+    margin:auto;
     padding:25px;
 }
 
 header{
-    margin-bottom:20px;
-}
-
-header h1{
-    font-size:2rem;
-}
-
-.main{
-    display:flex;
-    gap:20px;
-}
-
-aside{
-    width:320px;
-    background:#1f2937;
-    border-radius:12px;
-    padding:20px;
-    max-height:85vh;
-    overflow-y:auto;
-}
-
-section{
-    flex:1;
-    background:#1f2937;
-    border-radius:12px;
-    padding:20px;
-}
-
-h2{
-    margin-bottom:15px;
-}
-
-.post-btn{
-    width:100%;
-    text-align:left;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    margin-bottom:10px;
-    background:#374151;
-    color:white;
-    cursor:pointer;
-    transition:0.2s;
-}
-
-.post-btn:hover{
-    background:#4b5563;
-}
-
-.selected-post{
-    border:2px solid #60a5fa;
-}
-
-.post-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:20px;
+    margin-bottom:25px;
 }
 
-#postStatusBadge{
-    padding:8px 14px;
-    border-radius:20px;
-    font-weight:bold;
-}
-
-.candidate-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#374151;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:10px;
-}
-
-.actions button{
-    margin-left:5px;
-}
-
-button{
-    border:none;
-    border-radius:8px;
-    padding:10px 14px;
-    cursor:pointer;
-}
-
-.add-box{
-    margin-top:20px;
-    display:flex;
-    gap:10px;
-}
-
-input{
-    flex:1;
-    padding:10px;
-    border:none;
-    border-radius:8px;
-}
-
-.post-controls{
-    margin-top:20px;
-}
-
-#togglePostBtn{
-    background:#f59e0b;
-    color:white;
-}
-
-#togglePostBtn:hover{
-    opacity:0.9;
-}
-
-.control-panel{
-    border:2px solid #374151;
-    border-radius:12px;
-    padding:20px;
-    margin-bottom:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:15px;
-}
-
-
-#electionState{
-    padding:10px 18px;
+#statusBadge{
+    padding:12px 20px;
     border-radius:999px;
     font-weight:bold;
-    min-width:180px;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+.card{
+    background:#1f2937;
+    padding:20px;
+    border-radius:12px;
     text-align:center;
 }
 
-.control-row{
-    display:flex;
-    gap:12px;
-    align-items:center;
+.card h3{
+    color:#9ca3af;
+    margin-bottom:10px;
 }
 
-#electionToggleBtn,
-#resultsBtn{
-    padding:10px 18px;
+.card p{
+    font-size:2rem;
+    font-weight:bold;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(350px,1fr));
+    gap:20px;
+}
+
+.panel{
+    background:#1f2937;
+    border-radius:12px;
+    padding:20px;
+}
+
+.panel h2{
+    margin-bottom:15px;
+}
+
+button{
+    width:100%;
+    border:none;
+    border-radius:8px;
+    padding:12px;
+    margin-bottom:10px;
+    cursor:pointer;
+    color:white;
     font-weight:600;
-    transition:.2s;
-}
-#electionToggleBtn{
-    color:white;
-}
-#resultsBtn{
-    background:#2563eb;
-    color:white;
 }
 
-#electionToggleBtn:hover,
-#resultsBtn:hover{
-    transform:translateY(-2px);
+.primary{
+    background:#2563eb;
+}
+
+.success{
+    background:#16a34a;
+}
+
+.danger{
+    background:#dc2626;
+}
+
+.secondary{
+    background:#374151;
 }
 
 </style>
@@ -194,92 +121,96 @@ input{
 <div class="container">
 
 <header>
-    <h1>💻 Election Admin Panel</h1>
+
+    <h1>🗳 Election Dashboard</h1>
+
+    <div id="statusBadge">
+        Loading...
+    </div>
+
 </header>
 
-<div class="control-panel">
-    <div id="electionState">
-        Loading...
+<div class="stats-grid">
+
+    <div class="card">
+        <h3>Total Ballots</h3>
+        <p id="totalBallots">0</p>
     </div>
-    <div class="control-row">
 
-    <button
-        id="electionToggleBtn"
-        onclick="toggleElection()">
+    <div class="card">
+        <h3>Student Ballots</h3>
+        <p id="studentBallots">0</p>
+    </div>
 
-        Loading...
+    <div class="card">
+        <h3>Teacher Ballots</h3>
+        <p id="teacherBallots">0</p>
+    </div>
 
-    </button>
-
-    <button
-        id="resultsBtn"
-        onclick="window.location.href='/results-page'">
-
-        View Results
-
-    </button>
-
+    <div class="card">
+        <h3>Total Votes</h3>
+        <p id="totalVotes">0</p>
+    </div>
 
 </div>
-</div>
 
-<div class="main">
+<div class="dashboard-grid">
 
-<aside>
+    <div class="panel">
 
-    <h2>Posts</h2>
-
-    <div id="posts"></div>
-
-</aside>
-
-<section>
-
-    <div class="post-header">
-
-        <h2 id="selectedPostTitle">
-            Select a Post
-        </h2>
-
-        <span id="postStatusBadge">
-            -
-        </span>
-
-    </div>
-
-    <div id="candidates">
-
-        Select a post to view candidates.
-
-    </div>
-
-    <div class="add-box">
-
-        <input
-            type="text"
-            id="candidateName"
-            placeholder="Candidate Name"
-        >
-
-        <button onclick="addCandidate()">
-            Add Candidate
-        </button>
-
-    </div>
-
-    <div class="post-controls">
+        <h2>Election Controls</h2>
 
         <button
-            id="togglePostBtn"
-            onclick="togglePost()">
+            id="toggleElectionBtn"
+            onclick="toggleElection()">
 
-            Toggle Active Status
+            Loading...
 
         </button>
 
     </div>
 
-</section>
+    <div class="panel">
+
+        <h2>Management</h2>
+
+        <button
+            class="primary"
+            onclick="location.href='/admin/manage'">
+
+            👥 Manage Candidates & Posts
+
+        </button>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>Results</h2>
+
+        <button
+            class="primary"
+            onclick="location.href='/results-page'">
+
+            📊 View Results
+
+        </button>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>Exports</h2>
+
+        <button
+            class="secondary"
+            onclick="location.href='/admin/export/csv'">
+
+            💾 Export CSV
+
+        </button>
+
+    </div>
 
 </div>
 
@@ -287,303 +218,7 @@ input{
 
 <script>
 
-let selectedPost = null;
-let selectedPostData = null;
-
-async function loadPosts(){
-
-    const response =
-        await fetch("/admin/posts");
-
-    const posts =
-        await response.json();
-
-    const container =
-        document.getElementById("posts");
-
-    container.innerHTML = "";
-
-    posts.forEach(post => {
-
-        const btn =
-            document.createElement("button");
-
-        btn.className =
-            "post-btn";
-
-        if(
-            selectedPost === post.id
-        ){
-            btn.classList.add(
-                "selected-post"
-            );
-        }
-
-        btn.innerText =
-            post.title;
-
-        if(!post.active){
-
-            btn.style.opacity = "0.5";
-
-            btn.innerText +=
-                " (Inactive)";
-        }
-
-        btn.onclick = () => {
-
-            selectedPost =
-                post.id;
-
-            selectedPostData =
-                post;
-
-            document
-                .getElementById(
-                    "selectedPostTitle"
-                )
-                .innerText =
-                post.title;
-
-            const badge =
-                document
-                .getElementById(
-                    "postStatusBadge"
-                );
-
-            badge.innerText =
-                post.active
-                ? "ACTIVE"
-                : "INACTIVE";
-
-            badge.style.background =
-                post.active
-                ? "#22c55e"
-                : "#ef4444";
-
-            loadCandidates(
-                post.id
-            );
-
-            loadPosts();
-        };
-
-        container.appendChild(
-            btn
-        );
-
-    });
-
-}
-
-async function loadCandidates(
-    postId
-){
-
-    const response =
-        await fetch(
-            `/admin/candidates/${postId}`
-        );
-
-    const candidates =
-        await response.json();
-
-    const container =
-        document.getElementById(
-            "candidates"
-        );
-
-    container.innerHTML = "";
-
-    candidates.forEach(
-        candidate => {
-
-        const div =
-            document.createElement(
-                "div"
-            );
-
-        div.className =
-            "candidate-row";
-
-        div.innerHTML = `
-            <span>
-                ${candidate.name}
-            </span>
-
-            <div class="actions">
-
-                <button
-                onclick="editCandidate(${candidate.id})">
-                    Edit
-                </button>
-
-                <button
-                onclick="deleteCandidate(${candidate.id})">
-                    Delete
-                </button>
-
-            </div>
-        `;
-
-        container.appendChild(
-            div
-        );
-
-    });
-
-}
-
-async function addCandidate(){
-
-    if(!selectedPost){
-
-        alert(
-            "Select a post first"
-        );
-
-        return;
-    }
-
-    const name =
-        document
-        .getElementById(
-            "candidateName"
-        ).value;
-
-    if(!name){
-        return;
-    }
-
-    await fetch(
-        "/admin/candidate",
-        {
-            method:"POST",
-
-            headers:{
-                "Content-Type":
-                "application/json"
-            },
-
-            body:JSON.stringify({
-                name:name,
-                post_id:selectedPost
-            })
-        }
-    );
-
-    document
-        .getElementById(
-            "candidateName"
-        ).value = "";
-
-    loadCandidates(
-        selectedPost
-    );
-
-}
-
-async function editCandidate(id){
-
-    const name =
-        prompt(
-            "Enter new name"
-        );
-
-    if(!name){
-        return;
-    }
-
-    await fetch(
-        `/admin/candidate/${id}`,
-        {
-            method:"PUT",
-
-            headers:{
-                "Content-Type":
-                "application/json"
-            },
-
-            body:JSON.stringify({
-                name:name
-            })
-        }
-    );
-
-    loadCandidates(
-        selectedPost
-    );
-
-}
-
-async function deleteCandidate(id){
-
-    if(
-        !confirm(
-            "Delete candidate?"
-        )
-    ){
-        return;
-    }
-
-    await fetch(
-        `/admin/candidate/${id}`,
-        {
-            method:"DELETE"
-        }
-    );
-
-    loadCandidates(
-        selectedPost
-    );
-
-}
-
-async function togglePost(){
-
-    if(!selectedPost){
-
-        alert(
-            "Select a post first"
-        );
-
-        return;
-    }
-
-    const response =
-        await fetch(
-            `/admin/post/${selectedPost}/toggle`,
-            {
-                method:"PUT"
-            }
-        );
-
-    const result =
-        await response.json();
-
-    selectedPostData.active =
-        result.active;
-
-    const badge =
-        document.getElementById(
-            "postStatusBadge"
-        );
-
-    badge.innerText =
-        result.active
-        ? "ACTIVE"
-        : "INACTIVE";
-
-    badge.style.background =
-        result.active
-        ? "#22c55e"
-        : "#ef4444";
-
-    loadPosts();
-
-}
-
-async function loadElectionStatus(){
+async function loadStatus(){
 
     const response =
         await fetch("/admin/status");
@@ -593,42 +228,42 @@ async function loadElectionStatus(){
 
     const badge =
         document.getElementById(
-            "electionState"
+            "statusBadge"
         );
 
     const btn =
         document.getElementById(
-            "electionToggleBtn"
+            "toggleElectionBtn"
         );
 
     if(data.election_open){
 
         badge.innerText =
-            "🟢 Election OPEN";
+            "🟢 ELECTION OPEN";
 
         badge.style.background =
-            "#22c55e";
+            "#16a34a";
 
         btn.innerText =
             "Close Election";
 
-        btn.style.background =
-            "#ef4444";
+        btn.className =
+            "danger";
 
     }
     else{
 
         badge.innerText =
-            "🔴 Election CLOSED";
+            "🔴 ELECTION CLOSED";
 
         badge.style.background =
-            "#ef4444";
+            "#dc2626";
 
         btn.innerText =
             "Open Election";
 
-        btn.style.background =
-            "#22c55e";
+        btn.className =
+            "success";
 
     }
 
@@ -636,15 +271,16 @@ async function loadElectionStatus(){
 
 async function toggleElection(){
 
-    const state =
+    const open =
         document
         .getElementById(
-            "electionState"
+            "statusBadge"
         )
-        .innerText;
+        .innerText
+        .includes("OPEN");
 
     const endpoint =
-        state.includes("OPEN")
+        open
         ? "/admin/close-election"
         : "/admin/open-election";
 
@@ -655,12 +291,11 @@ async function toggleElection(){
         }
     );
 
-    loadElectionStatus();
+    loadStatus();
 
 }
 
-loadPosts();
-loadElectionStatus();
+loadStatus();
 
 </script>
 
