@@ -46,9 +46,15 @@ def init_db():
     db.create_all()
     return "Database Created"
 
-@app.route("/admin-panel")
+@app.route("/admin")
 def admin_panel():
     return render_template("admin.html")
+
+@app.route("/results-page")
+def results_page():
+    return render_template(
+        "results.html"
+    )
 
 @app.route("/student")
 def student():

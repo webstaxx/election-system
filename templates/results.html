@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Election Results</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
+
+body{
+    background:#111827;
+    color:white;
+    min-height:100vh;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:25px;
+}
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+h1{
+    font-size:2rem;
+}
+
+.back-btn{
+    background:#374151;
+    color:white;
+    text-decoration:none;
+    padding:10px 16px;
+    border-radius:8px;
+}
+
+.back-btn:hover{
+    background:#4b5563;
+}
+
+.post-card{
+    background:#1f2937;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+}
+
+.post-title{
+    font-size:1.3rem;
+    margin-bottom:15px;
+}
+
+.candidate{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:#374151;
+
+    padding:12px;
+
+    border-radius:8px;
+
+    margin-bottom:10px;
+}
+
+.winner{
+    border:2px solid #22c55e;
+}
+
+.vote-count{
+    font-weight:bold;
+}
+
+.winner-badge{
+    background:#22c55e;
+    color:white;
+
+    padding:4px 10px;
+
+    border-radius:999px;
+
+    font-size:0.8rem;
+
+    margin-left:10px;
+}
+
+.status{
+    margin-bottom:20px;
+}
+
+.status-open{
+    color:#22c55e;
+}
+
+.status-closed{
+    color:#ef4444;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+
+        <h1>
+            Election Results
+        </h1>
+
+        <a
+            href="/admin"
+            class="back-btn">
+
+            Admin Panel
+
+        </a>
+
+    </header>
+
+    <div
+        id="status"
+        class="status">
+
+        Loading...
+
+    </div>
+
+    <div id="results">
+
+    </div>
+
+</div>
+
+<script>
+
+async function loadResults(){
+
+    const response =
+        await fetch(
+            "/results"
+        );
+
+    const data =
+        await response.json();
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+    status.innerHTML = data.election_open
+        ? "<span class='status-open'>Election Open</span>"
+        : "<span class='status-closed'>Election Closed</span>";
+
+    const container =
+        document.getElementById(
+            "results"
+        );
+
+    container.innerHTML = "";
+
+    data.results.forEach(post => {
+
+        const card =
+            document.createElement(
+                "div"
+            );
+
+        card.className =
+            "post-card";
+
+        let html = `
+            <div class="post-title">
+                ${post.post_title}
+            </div>
+        `;
+
+        post.candidates.forEach(
+            (candidate,index) => {
+
+            html += `
+                <div class="
+                    candidate
+                    ${index === 0 ? "winner" : ""}
+                ">
+
+                    <div>
+
+                        ${candidate.name}
+
+                        ${
+                            index === 0
+                            ? `<span class="winner-badge">
+                                Leading
+                               </span>`
+                            : ""
+                        }
+
+                    </div>
+
+                    <div class="vote-count">
+
+                        ${candidate.votes}
+
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+        card.innerHTML = html;
+
+        container.appendChild(
+            card
+        );
+
+    });
+
+}
+
+loadResults();
+
+setInterval(
+    loadResults,
+    5000
+);
+
+</script>
+
+</body>
+</html>
