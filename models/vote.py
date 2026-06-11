@@ -1,5 +1,6 @@
 from extensions import db
 from datetime import datetime
+from sqlalchemy import func
 
 
 class Vote(db.Model):
@@ -14,14 +15,16 @@ class Vote(db.Model):
     )
 
     timestamp = db.Column(
-        db.DateTime,
+        db.DateTime(timezone=True),
         default=datetime.utcnow,
+        server_default=func.now(),
         nullable=False
     )
 
-    machine_id = db.Column(
-        db.Integer,
-        nullable=True
+    ballot_id = db.Column(
+        db.String(36),
+        nullable=False,
+        index=True
     )
 
     voter_type = db.Column(

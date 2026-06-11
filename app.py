@@ -13,6 +13,7 @@ from models import *
 from routes.api import api_bp
 from routes.admin import admin_bp
 from routes.voting import voting_bp
+from routes.results import results_bp
 
 from flask import Flask, render_template
 
@@ -31,6 +32,11 @@ app.register_blueprint(
     url_prefix="/vote"
 )
 
+app.register_blueprint(
+    results_bp,
+    url_prefix="/results"
+)
+
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -43,11 +49,6 @@ def init_db():
 @app.route("/admin-panel")
 def admin_panel():
     return render_template("admin.html")
-
-@app.route("/results")
-def results_page():
-    return "<h1>Results Coming Soon</h1>"
-
 
 @app.route("/student")
 def student():

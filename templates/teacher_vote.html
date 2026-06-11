@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Student Voting Portal</title>
+<title>Teacher Voting Portal</title>
 
 <style>
 
@@ -99,12 +99,30 @@ button{
     color:white;
 }
 
+.teacher-badge{
+    display:inline-block;
+
+    background:#f59e0b;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    margin-bottom:15px;
+
+    font-weight:bold;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="container">
+
+    <div class="teacher-badge">
+        Teacher Portal
+    </div>
 
     <div id="progress"></div>
 
@@ -138,25 +156,15 @@ button{
 
 <script>
 
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
-
-const house =
-    params.get("house");
-
 let posts = [];
-
 let currentPost = 0;
-
 let ballot = {};
 
 async function loadBallot(){
 
     const response =
         await fetch(
-            `/vote/ballot/student/${house}`
+            "/vote/ballot/teacher"
         );
 
     const data =
@@ -288,9 +296,7 @@ function showReview(){
 
         html += `
             <div class="candidate">
-                <strong>
-                    ${post.title}
-                </strong>
+                <strong>${post.title}</strong>
                 <br>
                 ${candidate.name}
             </div>
@@ -347,14 +353,14 @@ async function submitBallot(){
                     "application/json"
                 },
 
-            body:JSON.stringify({
+                body:JSON.stringify({
 
-                voter_type:
-                    "student",
+                    voter_type:
+                        "teacher",
 
-                votes:votes
+                    votes:votes
 
-            })
+                })
             }
         );
 

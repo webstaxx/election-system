@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+import uuid
 
 from extensions import db
 from models import Post, Candidate, Vote, Settings
@@ -162,7 +163,7 @@ def submit_ballot():
 
     votes = data.get("votes", [])
     voter_type = data.get("voter_type")
-    machine_id = data.get("machine_id")
+    ballot_id = str(uuid.uuid4())
 
     if not votes:
         return jsonify({
@@ -199,9 +200,9 @@ def submit_ballot():
                 }), 400
 
             vote = Vote(
+                ballot_id=ballot_id,
                 candidate_id=candidate_id,
-                voter_type=voter_type,
-                machine_id=machine_id
+                voter_type=voter_type
             )
 
             db.session.add(vote)
@@ -210,7 +211,8 @@ def submit_ballot():
 
         return jsonify({
             "success": True,
-            "message": "Ballot submitted successfully"
+            "message": "Ballot submitted successfully",
+            "ballot_id": ballot_id
         })
 
     except Exception as e:
