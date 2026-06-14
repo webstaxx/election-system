@@ -6,8 +6,8 @@ from models import Post
 POSTS = [
 
     # Common Posts
-    ("School Captain", "common", None),
-    ("School Vice Captain", "common", None),
+    ("Head Boy", "common", None),
+    ("Head Girl", "common", None),
 
     ("Junior Captain", "common", None),
     ("Junior Vice Captain", "common", None),

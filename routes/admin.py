@@ -1,7 +1,24 @@
 from flask import Blueprint, jsonify, request
+from sqlalchemy import func
 
 from extensions import db
-from models import Post, Candidate, Settings
+from models import (
+    Post,
+    Candidate,
+    Settings,
+    Vote
+)
+
+import csv
+
+from io import StringIO
+
+from flask import (
+    Blueprint,
+    jsonify,
+    request,
+    Response
+)
 
 admin_bp = Blueprint(
     "admin",
@@ -262,3 +279,142 @@ def close_election():
         "success": True,
         "election_open": False
     })
+
+# ==========================================
+# DASHBOARD STATS
+# ==========================================
+
+@admin_bp.route(
+    "/dashboard-stats",
+    methods=["GET"]
+)
+def dashboard_stats():
+
+    settings = Settings.query.first()
+
+    if not settings:
+
+        settings = Settings()
+
+        db.session.add(settings)
+        db.session.commit()
+
+    total_ballots = db.session.query(
+        Vote.ballot_id
+    ).distinct().count()
+
+    student_ballots = db.session.query(
+        Vote.ballot_id
+    ).filter(
+        Vote.voter_type == "student"
+    ).distinct().count()
+
+    teacher_ballots = db.session.query(
+        Vote.ballot_id
+    ).filter(
+        Vote.voter_type == "teacher"
+    ).distinct().count()
+
+    total_votes = Vote.query.count()
+
+    total_posts = Post.query.count()
+
+    active_posts = Post.query.filter_by(
+        active=True
+    ).count()
+
+    total_candidates = Candidate.query.count()
+
+    active_candidates = Candidate.query.filter_by(
+        active=True
+    ).count()
+
+    return jsonify({
+
+        "election_open":
+            settings.election_open,
+
+        "total_ballots":
+            total_ballots,
+
+        "student_ballots":
+            student_ballots,
+
+        "teacher_ballots":
+            teacher_ballots,
+
+        "total_votes":
+            total_votes,
+
+        "total_posts":
+            total_posts,
+
+        "active_posts":
+            active_posts,
+
+        "total_candidates":
+            total_candidates,
+
+        "active_candidates":
+            active_candidates
+
+    })
+
+# ==========================================
+# EXPORT RAW VOTES CSV
+# ==========================================
+
+@admin_bp.route(
+    "/export/votes-csv",
+    methods=["GET"]
+)
+def export_votes_csv():
+
+    output = StringIO()
+
+    writer = csv.writer(output)
+
+    writer.writerow([
+        "Vote ID",
+        "Ballot ID",
+        "Candidate ID",
+        "Candidate Name",
+        "Post",
+        "Voter Type",
+        "Timestamp"
+    ])
+
+    votes = Vote.query.order_by(
+        Vote.id
+    ).all()
+
+    for vote in votes:
+
+        candidate = vote.candidate
+
+        post_title = (
+            candidate.post.title
+            if candidate and candidate.post
+            else ""
+        )
+
+        writer.writerow([
+            vote.id,
+            vote.ballot_id,
+            vote.candidate_id,
+            candidate.name if candidate else "",
+            post_title,
+            vote.voter_type,
+            vote.timestamp
+        ])
+
+    output.seek(0)
+
+    return Response(
+        output.getvalue(),
+        mimetype="text/csv",
+        headers={
+            "Content-Disposition":
+            "attachment; filename=vote_backup.csv"
+        }
+    )

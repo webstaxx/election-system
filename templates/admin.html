@@ -1,440 +1,742 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Election Admin Panel</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI, sans-serif;
+/* ── Reset & Typography ───────────────────────────── */
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-body{
-    background:#111827;
-    color:white;
-    min-height:100vh;
+/* ── Base ─────────────────────────────────────────── */
+body {
+  background: #09090b;
+  background-image: radial-gradient(circle at 50% 0%, #18181b 0%, #09090b 70%);
+  color: #f4f4f5;
+  min-height: 100vh;
+  line-height: 1.5;
 }
 
-.container{
-    padding:25px;
+/* ── Shared Layout ────────────────────────────────── */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  animation: fadeIn 0.4s ease-out;
 }
 
-header{
-    margin-bottom:20px;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-header h1{
-    font-size:2rem;
+/* ── Top Header ───────────────────────────────────── */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.main{
-    display:flex;
-    gap:20px;
+.hero h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  background: linear-gradient(to right, #ffffff, #a1a1aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-aside{
-    width:320px;
-    background:#1f2937;
-    border-radius:12px;
-    padding:20px;
-    max-height:85vh;
-    overflow-y:auto;
+.subtitle {
+  color: #a1a1aa;
+  margin-top: 6px;
+  font-weight: 500;
+  font-size: 1.05rem;
 }
 
-section{
-    flex:1;
-    background:#1f2937;
-    border-radius:12px;
-    padding:20px;
+/* ── Election Status Badge ────────────────────────── */
+#dashboardStatusBadge, #electionState {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.02em;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
 }
 
-h2{
-    margin-bottom:15px;
+/* ── Main Actions (Manage / Results) ──────────────── */
+.main-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
-.post-btn{
-    width:100%;
-    text-align:left;
-    padding:12px;
-    border:none;
-    border-radius:8px;
-    margin-bottom:10px;
-    background:#374151;
-    color:white;
-    cursor:pointer;
-    transition:0.2s;
+.main-action {
+  background: rgba(39, 39, 42, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  color: #fff;
 }
 
-.post-btn:hover{
-    background:#4b5563;
+.main-action:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(39, 39, 42, 0.7);
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
 }
 
-.selected-post{
-    border:2px solid #60a5fa;
+.main-action span {
+  font-size: 2.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 14px;
 }
 
-.post-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+.main-action h3 {
+  font-size: 1.25rem;
+  margin-bottom: 6px;
+  font-weight: 700;
 }
 
-#postStatusBadge{
-    padding:8px 14px;
-    border-radius:20px;
-    font-weight:bold;
+.main-action p {
+  color: #a1a1aa;
+  font-size: 0.95rem;
 }
 
-.candidate-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#374151;
-    padding:12px;
-    border-radius:8px;
-    margin-bottom:10px;
+/* ── Stats Grid ───────────────────────────────────── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
-.actions button{
-    margin-left:5px;
+.stat-card {
+  background: rgba(39, 39, 42, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s ease;
 }
 
-button{
-    border:none;
-    border-radius:8px;
-    padding:10px 14px;
-    cursor:pointer;
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.add-box{
-    margin-top:20px;
-    display:flex;
-    gap:10px;
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a1a1aa;
 }
 
-input{
-    flex:1;
-    padding:10px;
-    border:none;
-    border-radius:8px;
+.stat-card .stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
 }
 
-.post-controls{
-    margin-top:20px;
+/* ── Control & Utility Cards ──────────────────────── */
+.control-card, .utility-card {
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
 }
 
-#togglePostBtn{
-    background:#f59e0b;
-    color:white;
+.control-card h2, .utility-card h2 {
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+  font-weight: 700;
 }
 
-#togglePostBtn:hover{
-    opacity:0.9;
+.control-card p {
+  color: #a1a1aa;
+  margin-bottom: 20px;
 }
 
-.control-panel{
-    border:2px solid #374151;
-    border-radius:12px;
-    padding:20px;
-    margin-bottom:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:15px;
+#dashboardToggleElectionBtn, .utility-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
 }
 
-
-#electionState{
-    padding:10px 18px;
-    border-radius:999px;
-    font-weight:bold;
-    min-width:180px;
-    text-align:center;
+#dashboardToggleElectionBtn:hover, .utility-btn:hover {
+  filter: brightness(1.1);
+  transform: scale(0.99);
 }
 
-.control-row{
-    display:flex;
-    gap:12px;
-    align-items:center;
+.utility-btn {
+  background: linear-gradient(135deg, #0d9488, #0f766e);
 }
 
-#electionToggleBtn,
-#resultsBtn{
-    padding:10px 18px;
-    font-weight:600;
-    transition:.2s;
+/* ── EDITOR VIEW ──────────────────────────────────── */
+#editor-view { display: none; }
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
 }
-#electionToggleBtn{
-    color:white;
+
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(39, 39, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e4e4e7;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-#resultsBtn{
-    background:#2563eb;
-    color:white;
+
+.back-btn:hover { 
+  background: #27272a; 
+  color: #fff; 
 }
+
+.editor-header h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+/* ── Election Control Bar (in editor) ─────────────── */
+.control-panel {
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.control-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#electionToggleBtn, #resultsBtn {
+  padding: 10px 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+#electionToggleBtn { color: #fff; }
+#resultsBtn { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; }
 
 #electionToggleBtn:hover,
-#resultsBtn:hover{
-    transform:translateY(-2px);
+#resultsBtn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+/* ── Post + Candidate Editor ──────────────────────── */
+.editor-main {
+  display: flex;
+  gap: 24px;
+}
+
+.editor-aside {
+  width: 320px;
+  background: rgba(24, 24, 27, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.editor-section {
+  flex: 1;
+  background: rgba(24, 24, 27, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.editor-aside h2,
+.editor-section h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #f4f4f5;
+}
+
+.post-btn {
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: rgba(39, 39, 42, 0.3);
+  color: #d4d4d8;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.post-btn:hover { 
+  background: rgba(63, 63, 70, 0.5); 
+  color: #fff;
+}
+
+.selected-post {
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  background: rgba(79, 70, 229, 0.15) !important;
+  color: #fff !important;
+  box-shadow: 0 0 15px rgba(79, 70, 229, 0.1);
+}
+
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#postStatusBadge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Candidate Rows ───────────────────────────────── */
+.candidate-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(9, 9, 11, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: border-color 0.2s;
+}
+
+.candidate-row:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.actions button {
+  margin-left: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(63, 63, 70, 0.5);
+  color: #f4f4f5;
+  transition: all 0.2s ease;
+}
+
+.actions button:hover { 
+  background: rgba(255, 255, 255, 0.15); 
+}
+
+.actions button:last-child:hover {
+  background: rgba(239, 68, 68, 0.8); /* Red hover for delete */
+}
+
+/* ── Add Candidate Input ──────────────────────────── */
+.add-box {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.add-box input {
+  flex: 1;
+  padding: 12px 16px;
+  background: rgba(9, 9, 11, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #f4f4f5;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.simple-btn
+{
+    flex: 1;
+  padding: 12px 16px;
+  background: rgba(9, 9, 11, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #f4f4f5;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.add-box input:focus { 
+  border-color: #6366f1; 
+}
+
+.add-box input::placeholder { color: #71717a; }
+
+.add-box button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+.add-box button:hover { filter: brightness(1.15); }
+
+/* ── Post Controls ────────────────────────────────── */
+.post-controls { 
+  margin-top: 24px; 
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#togglePostBtn {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.2s ease;
+}
+
+#togglePostBtn:hover { filter: brightness(1.1); }
+
+/* ── Scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* ── Responsive ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .editor-main { flex-direction: column; }
+  .editor-aside { width: 100%; max-height: 280px; }
+  .main-actions { grid-template-columns: 1fr; }
+  .hero { flex-direction: column; align-items: flex-start; gap: 16px; }
 }
 
 </style>
-
 </head>
-
 <body>
 
-<div class="container">
+<!-- ══════════════════════════════════════════
+     DASHBOARD VIEW (default)
+══════════════════════════════════════════ -->
+<div id="dashboard-view" class="page">
 
-<header>
-    <h1>💻 Election Admin Panel</h1>
-</header>
-
-<div class="control-panel">
-    <div id="electionState">
-        Loading...
+    <div class="hero">
+        <div>
+            <h1>🗳 Student Council Elections</h1>
+            <p class="subtitle">Election Administration Dashboard</p>
+        </div>
+        <div id="dashboardStatusBadge">Loading...</div>
     </div>
+
+    <!-- MAIN ACTIONS -->
+    <div class="main-actions">
+        <button class="main-action manage-btn" onclick="showView('editor')">
+            <span>👥</span>
+            <div>
+                <h3>Manage Posts & Candidates</h3>
+                <p>Edit election positions and candidates</p>
+            </div>
+        </button>
+
+        <button class="main-action result-btn" onclick="window.location.href='/results-page'">
+            <span>📊</span>
+            <div>
+                <h3>Results</h3>
+                <p>View live vote counts and standings</p>
+            </div>
+        </button>
+    </div>
+
+    <!-- ELECTION CONTROL -->
+    <div class="control-card">
+        <h2>Election Control</h2>
+        <p>Open or close voting across all devices.</p>
+        <button id="dashboardToggleElectionBtn" onclick="toggleElection()">Loading...</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value" id="statTotalBallots">—</div>
+            <div class="stat-label">Ballots Cast</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statStudentBallots">—</div>
+            <div class="stat-label">Student Ballots</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statTeacherBallots">—</div>
+            <div class="stat-label">Teacher Ballots</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" id="statTotalVotes">—</div>
+            <div class="stat-label">Total Votes</div>
+        </div>
+    </div>
+
+    <!-- UTILITIES -->
+    <div class="utility-card">
+        <h2>Utilities</h2>
+        <button class="utility-btn" onclick="exportCSV()">💾 Export Results CSV</button>
+    </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     EDITOR VIEW (hidden by default)
+══════════════════════════════════════════ -->
+<div id="editor-view" class="page">
+
+  <!-- Editor Header -->
+  <div class="editor-header">
+    <button class="back-btn" onclick="showView('dashboard')">
+      ← Back to Dashboard
+    </button>
+    <h2>Posts &amp; Candidates</h2>
+  </div>
+
+  <!-- Election Control Bar -->
+  <div class="control-panel">
+    <div id="electionState">Loading…</div>
     <div class="control-row">
-
-    <button
-        id="electionToggleBtn"
-        onclick="toggleElection()">
-
-        Loading...
-
-    </button>
-
-    <button
-        id="resultsBtn"
-        onclick="window.location.href='/results-page'">
-
-        View Results
-
-    </button>
-
-
-</div>
-</div>
-
-<div class="main">
-
-<aside>
-
-    <h2>Posts</h2>
-
-    <div id="posts"></div>
-
-</aside>
-
-<section>
-
-    <div class="post-header">
-
-        <h2 id="selectedPostTitle">
-            Select a Post
-        </h2>
-
-        <span id="postStatusBadge">
-            -
-        </span>
-
+      <button id="electionToggleBtn" onclick="toggleElection()">Loading…</button>
+      <button id="resultsBtn" onclick="window.location.href='/results-page'">View Results</button>
     </div>
+  </div>
 
-    <div id="candidates">
+  <!-- Post + Candidate Editor -->
+  <div class="editor-main">
+    <aside class="editor-aside">
+      <h2>Posts</h2>
+      <div id="posts"></div>
+    </aside>
 
+    <section class="editor-section">
+      <div class="post-header">
+        <h2 id="selectedPostTitle">Select a Post</h2>
+        <span id="postStatusBadge">-</span>
+      </div>
+
+      <div id="candidates">
         Select a post to view candidates.
+      </div>
 
-    </div>
+      <div class="add-box">
+        <input type="text" id="candidateName" placeholder="Candidate Name">
+        <button onclick="addCandidate()">Add Candidate</button>
+      </div>
 
-    <div class="add-box">
-
-        <input
-            type="text"
-            id="candidateName"
-            placeholder="Candidate Name"
-        >
-
-        <button onclick="addCandidate()">
-            Add Candidate
+      <div class="post-controls">
+        <button id="togglePostBtn" onclick="togglePost()">Toggle Active Status</button>
+        <button class="simple-btn" onclick="editPostName()">
+        Rename Post
         </button>
-
-    </div>
-
-    <div class="post-controls">
-
-        <button
-            id="togglePostBtn"
-            onclick="togglePost()">
-
-            Toggle Active Status
-
-        </button>
-
-    </div>
-
-</section>
-
-</div>
+      </div>
+    </section>
+  </div>
 
 </div>
 
 <script>
+/* ── View switching ─────────────────────────────── */
+function showView(name) {
+  document.getElementById('dashboard-view').style.display =
+    name === 'dashboard' ? 'block' : 'none';
+  document.getElementById('editor-view').style.display =
+    name === 'editor' ? 'block' : 'none';
+}
 
-let selectedPost = null;
+/* ── State ──────────────────────────────────────── */
+let selectedPost     = null;
 let selectedPostData = null;
 
-async function loadPosts(){
+/* ── Posts ──────────────────────────────────────── */
+async function loadPosts() {
+  const response = await fetch('/admin/posts');
+  const posts    = await response.json();
+  const container = document.getElementById('posts');
+  container.innerHTML = '';
 
-    const response =
-        await fetch("/admin/posts");
+  posts.forEach(post => {
+    const btn = document.createElement('button');
+    btn.className = 'post-btn';
 
-    const posts =
-        await response.json();
+    if (selectedPost === post.id) {
+      btn.classList.add('selected-post');
+    }
 
-    const container =
-        document.getElementById("posts");
+    btn.innerText = post.title;
 
-    container.innerHTML = "";
+    if (!post.active) {
+      btn.style.opacity = '0.5';
+      btn.innerText += ' (Inactive)';
+    }
 
-    posts.forEach(post => {
+    btn.onclick = () => {
+      selectedPost     = post.id;
+      selectedPostData = post;
 
-        const btn =
-            document.createElement("button");
+      document.getElementById('selectedPostTitle').innerText = post.title;
 
-        btn.className =
-            "post-btn";
+      const badge = document.getElementById('postStatusBadge');
+      badge.innerText         = post.active ? 'ACTIVE' : 'INACTIVE';
+      badge.style.background  = post.active ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+      badge.style.color       = post.active ? '#4ade80' : '#f87171';
+      badge.style.border      = post.active ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(239, 68, 68, 0.5)';
 
-        if(
-            selectedPost === post.id
-        ){
-            btn.classList.add(
-                "selected-post"
-            );
-        }
+      loadCandidates(post.id);
+      loadPosts();
+    };
 
-        btn.innerText =
-            post.title;
-
-        if(!post.active){
-
-            btn.style.opacity = "0.5";
-
-            btn.innerText +=
-                " (Inactive)";
-        }
-
-        btn.onclick = () => {
-
-            selectedPost =
-                post.id;
-
-            selectedPostData =
-                post;
-
-            document
-                .getElementById(
-                    "selectedPostTitle"
-                )
-                .innerText =
-                post.title;
-
-            const badge =
-                document
-                .getElementById(
-                    "postStatusBadge"
-                );
-
-            badge.innerText =
-                post.active
-                ? "ACTIVE"
-                : "INACTIVE";
-
-            badge.style.background =
-                post.active
-                ? "#22c55e"
-                : "#ef4444";
-
-            loadCandidates(
-                post.id
-            );
-
-            loadPosts();
-        };
-
-        container.appendChild(
-            btn
-        );
-
-    });
-
+    container.appendChild(btn);
+  });
 }
 
-async function loadCandidates(
-    postId
-){
+/* ── Candidates ─────────────────────────────────── */
+async function loadCandidates(postId) {
+  const response   = await fetch(`/admin/candidates/${postId}`);
+  const candidates = await response.json();
+  const container  = document.getElementById('candidates');
+  container.innerHTML = '';
 
-    const response =
-        await fetch(
-            `/admin/candidates/${postId}`
-        );
-
-    const candidates =
-        await response.json();
-
-    const container =
-        document.getElementById(
-            "candidates"
-        );
-
-    container.innerHTML = "";
-
-    candidates.forEach(
-        candidate => {
-
-        const div =
-            document.createElement(
-                "div"
-            );
-
-        div.className =
-            "candidate-row";
-
-        div.innerHTML = `
-            <span>
-                ${candidate.name}
-            </span>
-
-            <div class="actions">
-
-                <button
-                onclick="editCandidate(${candidate.id})">
-                    Edit
-                </button>
-
-                <button
-                onclick="deleteCandidate(${candidate.id})">
-                    Delete
-                </button>
-
-            </div>
-        `;
-
-        container.appendChild(
-            div
-        );
-
-    });
-
+  candidates.forEach(candidate => {
+    const div = document.createElement('div');
+    div.className = 'candidate-row';
+    div.innerHTML = `
+      <span>${candidate.name}</span>
+      <div class="actions">
+        <button onclick="editCandidate(${candidate.id})">Edit</button>
+        <button onclick="deleteCandidate(${candidate.id})">Delete</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
 }
 
-async function addCandidate(){
+async function addCandidate() {
+  if (!selectedPost) { alert('Select a post first'); return; }
+  const name = document.getElementById('candidateName').value;
+  if (!name) return;
+
+  await fetch('/admin/candidate', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ name, post_id: selectedPost })
+  });
+
+  document.getElementById('candidateName').value = '';
+  loadCandidates(selectedPost);
+}
+
+async function editCandidate(id) {
+  const name = prompt('Enter new name');
+  if (!name) return;
+
+  await fetch(`/admin/candidate/${id}`, {
+    method:  'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ name })
+  });
+
+  loadCandidates(selectedPost);
+}
+
+async function deleteCandidate(id) {
+  if (!confirm('Delete candidate?')) return;
+
+  await fetch(`/admin/candidate/${id}`, { method: 'DELETE' });
+  loadCandidates(selectedPost);
+}
+
+async function togglePost() {
+  if (!selectedPost) { alert('Select a post first'); return; }
+
+  const response = await fetch(
+    `/admin/post/${selectedPost}/toggle`,
+    { method: 'PUT' }
+  );
+  const result = await response.json();
+
+  selectedPostData.active = result.active;
+
+  const badge = document.getElementById('postStatusBadge');
+  badge.innerText        = result.active ? 'ACTIVE' : 'INACTIVE';
+  badge.style.background  = result.active ? 'rgba(34, 197, 94, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+  badge.style.color       = result.active ? '#4ade80' : '#f87171';
+  badge.style.border      = result.active ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(239, 68, 68, 0.5)';
+
+  loadPosts();
+}
+
+async function editPostName(){
 
     if(!selectedPost){
 
@@ -445,57 +747,21 @@ async function addCandidate(){
         return;
     }
 
-    const name =
-        document
-        .getElementById(
-            "candidateName"
-        ).value;
-
-    if(!name){
-        return;
-    }
-
-    await fetch(
-        "/admin/candidate",
-        {
-            method:"POST",
-
-            headers:{
-                "Content-Type":
-                "application/json"
-            },
-
-            body:JSON.stringify({
-                name:name,
-                post_id:selectedPost
-            })
-        }
-    );
-
-    document
-        .getElementById(
-            "candidateName"
-        ).value = "";
-
-    loadCandidates(
-        selectedPost
-    );
-
-}
-
-async function editCandidate(id){
-
-    const name =
+    const newTitle =
         prompt(
-            "Enter new name"
+            "Enter new post name",
+            selectedPostData.title
         );
 
-    if(!name){
+    if(
+        !newTitle ||
+        !newTitle.trim()
+    ){
         return;
     }
 
     await fetch(
-        `/admin/candidate/${id}`,
+        `/admin/post/${selectedPost}`,
         {
             method:"PUT",
 
@@ -505,164 +771,105 @@ async function editCandidate(id){
             },
 
             body:JSON.stringify({
-                name:name
+                title:newTitle
             })
         }
     );
 
-    loadCandidates(
-        selectedPost
-    );
+    selectedPostData.title =
+        newTitle;
 
-}
-
-async function deleteCandidate(id){
-
-    if(
-        !confirm(
-            "Delete candidate?"
+    document
+        .getElementById(
+            "selectedPostTitle"
         )
-    ){
-        return;
-    }
-
-    await fetch(
-        `/admin/candidate/${id}`,
-        {
-            method:"DELETE"
-        }
-    );
-
-    loadCandidates(
-        selectedPost
-    );
-
-}
-
-async function togglePost(){
-
-    if(!selectedPost){
-
-        alert(
-            "Select a post first"
-        );
-
-        return;
-    }
-
-    const response =
-        await fetch(
-            `/admin/post/${selectedPost}/toggle`,
-            {
-                method:"PUT"
-            }
-        );
-
-    const result =
-        await response.json();
-
-    selectedPostData.active =
-        result.active;
-
-    const badge =
-        document.getElementById(
-            "postStatusBadge"
-        );
-
-    badge.innerText =
-        result.active
-        ? "ACTIVE"
-        : "INACTIVE";
-
-    badge.style.background =
-        result.active
-        ? "#22c55e"
-        : "#ef4444";
+        .innerText =
+        newTitle;
 
     loadPosts();
-
 }
 
-async function loadElectionStatus(){
+/* ── Election status ────────────────────────────── */
+async function loadElectionStatus() {
+  const response = await fetch('/admin/status');
+  const data     = await response.json();
 
-    const response =
-        await fetch("/admin/status");
+  const badge  = document.getElementById('electionState');
+  const btn    = document.getElementById('electionToggleBtn');
+  const dashBadge = document.getElementById('dashboardStatusBadge');
+  const dashBtn   = document.getElementById('dashboardToggleElectionBtn');
 
-    const data =
-        await response.json();
+  if (data.election_open) {
+    badge.innerText        = '🟢 Election OPEN';
+    badge.style.background = 'rgba(34, 197, 94, 0.15)';
+    badge.style.color      = '#4ade80';
+    btn.innerText          = 'Close Election';
+    btn.style.background   = 'linear-gradient(135deg, #ef4444, #dc2626)';
 
-    const badge =
-        document.getElementById(
-            "electionState"
-        );
+    dashBadge.innerText        = '🟢 Election OPEN';
+    dashBadge.style.background = 'rgba(34, 197, 94, 0.15)';
+    dashBadge.style.color      = '#4ade80';
+    dashBadge.style.border     = '1px solid rgba(34, 197, 94, 0.3)';
+    dashBtn.innerText          = '⚡ Close Election';
+    dashBtn.style.background   = 'linear-gradient(135deg, #ef4444, #dc2626)';
+  } else {
+    badge.innerText        = '🔴 Election CLOSED';
+    badge.style.background = 'rgba(239, 68, 68, 0.15)';
+    badge.style.color      = '#f87171';
+    btn.innerText          = 'Open Election';
+    btn.style.background   = 'linear-gradient(135deg, #22c55e, #16a34a)';
 
-    const btn =
-        document.getElementById(
-            "electionToggleBtn"
-        );
-
-    if(data.election_open){
-
-        badge.innerText =
-            "🟢 Election OPEN";
-
-        badge.style.background =
-            "#22c55e";
-
-        btn.innerText =
-            "Close Election";
-
-        btn.style.background =
-            "#ef4444";
-
-    }
-    else{
-
-        badge.innerText =
-            "🔴 Election CLOSED";
-
-        badge.style.background =
-            "#ef4444";
-
-        btn.innerText =
-            "Open Election";
-
-        btn.style.background =
-            "#22c55e";
-
-    }
-
+    dashBadge.innerText        = '🔴 Election CLOSED';
+    dashBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+    dashBadge.style.color      = '#f87171';
+    dashBadge.style.border     = '1px solid rgba(239, 68, 68, 0.3)';
+    dashBtn.innerText          = '⚡ Open Election';
+    dashBtn.style.background   = 'linear-gradient(135deg, #22c55e, #16a34a)';
+  }
 }
 
-async function toggleElection(){
+async function toggleElection() {
+  const state    = document.getElementById('electionState').innerText;
+  const endpoint = state.includes('OPEN')
+    ? '/admin/close-election'
+    : '/admin/open-election';
 
-    const state =
-        document
-        .getElementById(
-            "electionState"
-        )
-        .innerText;
-
-    const endpoint =
-        state.includes("OPEN")
-        ? "/admin/close-election"
-        : "/admin/open-election";
-
-    await fetch(
-        endpoint,
-        {
-            method:"PUT"
-        }
-    );
-
-    loadElectionStatus();
-
+  await fetch(endpoint, { method: 'PUT' });
+  loadElectionStatus();
 }
 
+/* ── Export CSV ─────────────────────────────────── */
+function exportCSV() {
+  window.open('admin/export/votes-csv', '_blank');
+}
+
+/* ── Statistics ─────────────────────────────────── */
+async function loadStats() {
+  try {
+    // Updated to your new backend endpoint
+    const response = await fetch('/admin/dashboard-stats');
+    if (!response.ok) return;
+    const stats = await response.json();
+
+    // Mapping to the existing HTML IDs so the styling stays dope
+    if (stats.total_ballots !== undefined)
+      document.getElementById('statTotalBallots').innerText = stats.total_ballots;
+    if (stats.student_ballots !== undefined)
+      document.getElementById('statStudentBallots').innerText = stats.student_ballots;
+    if (stats.teacher_ballots !== undefined)
+      document.getElementById('statTeacherBallots').innerText = stats.teacher_ballots;
+    if (stats.total_votes !== undefined)
+      document.getElementById('statTotalVotes').innerText = stats.total_votes;
+  } catch (error) { 
+      console.error("Stats fetch failed:", error);
+  }
+}
+
+/* ── Init ───────────────────────────────────────── */
 loadPosts();
 loadElectionStatus();
+loadStats();
 
 </script>
-
 </body>
 </html>

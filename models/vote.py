@@ -1,5 +1,6 @@
 from extensions import db
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from sqlalchemy import func
 
 
@@ -15,10 +16,8 @@ class Vote(db.Model):
     )
 
     timestamp = db.Column(
-        db.DateTime(timezone=True),
-        default=datetime.utcnow,
-        server_default=func.now(),
-        
+        db.DateTime,
+        default=datetime.now,
         nullable=False
     )
 
