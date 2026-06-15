@@ -3,116 +3,200 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <title>Teacher Voting Portal</title>
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+/* ── Dynamic Theme Variables (Super Charged Purple Accents) ── */
+:root {
+    --theme: #8b5cf6; /* Pure Royal Purple */
+    --theme-glow: rgba(139, 92, 246, 0.15);
+    --theme-border: rgba(139, 92, 246, 0.4);
 }
 
-body{
-    background:#111827;
-    color:white;
-
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
-.container{
-    width:90%;
-    max-width:800px;
-
-    background:#1f2937;
-
-    padding:30px;
-
-    border-radius:16px;
+body {
+    /* OFFLINE FLASK PATH FOR LOCAL STATIC SERVER IMAGE */
+    background-image: url('{{ url_for("static", filename="school.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #0f172a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
 }
 
-#progress{
-    color:#9ca3af;
-    margin-bottom:15px;
+/* Dark layout tint so the premium glass elements break away beautifully */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
+    z-index: 0;
 }
 
-h1{
-    margin-bottom:25px;
+/* ── Elite Glassmorphic Box ── */
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 580px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    padding: 40px 32px;
+    border-radius: 24px;
+    box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.05),
+        0 20px 50px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.candidate{
-    background:#374151;
-
-    padding:15px;
-
-    margin-bottom:12px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:0.2s;
+/* ── Premium Teacher Portal Badge ── */
+.teacher-badge {
+    display: inline-block;
+    background: var(--theme); /* Solid pure purple matching the accent theme */
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 9px;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
 }
 
-.candidate:hover{
-    background:#4b5563;
+#progress {
+    color: var(--theme);
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.candidate.selected{
-    border:2px solid #60a5fa;
+h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    color: #0f172a;
 }
 
-.controls{
-    margin-top:25px;
-
-    display:flex;
-    justify-content:space-between;
+/* ── Glassmorphic Options ── */
+.candidate {
+    background: rgba(48, 48, 48, 0.062);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1e293b;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
-button{
-    border:none;
-    border-radius:10px;
-
-    padding:12px 20px;
-
-    cursor:pointer;
+.candidate:hover {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
 }
 
-.next-btn{
-    background:#2563eb;
-    color:white;
+/* Vivid Glowing Selections (Purple Mode) */
+.candidate.selected {
+    background: var(--theme-glow) !important;
+    border-color: var(--theme-border) !important;
+    color: #000000;
+    box-shadow: 
+        0 0 0 2px var(--theme),
+        0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
-.prev-btn{
-    background:#374151;
-    color:white;
+.controls {
+    margin-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
 }
 
-.review-btn{
-    background:#22c55e;
-    color:white;
+/* ── Control System ── */
+button {
+    border: none;
+    border-radius: 14px;
+    padding: 16px 28px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
 }
 
-.teacher-badge{
-    display:inline-block;
-
-    background:#f59e0b;
-
-    padding:8px 14px;
-
-    border-radius:999px;
-
-    margin-bottom:15px;
-
-    font-weight:bold;
+button:active {
+    transform: scale(0.97);
 }
 
+.next-btn, .review-submit-btn {
+    background: var(--theme);
+    color: white;
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.25);
+}
+
+.next-btn:hover, .review-submit-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+}
+
+.prev-btn, .review-edit-btn {
+    background: rgba(15, 23, 42, 0.08);
+    color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.prev-btn:hover, .review-edit-btn:hover {
+    background: rgba(15, 23, 42, 0.15);
+}
+
+/* ── Review Modules ── */
+.review-item {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 16px 20px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    border-left: 5px solid var(--theme);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+}
+.review-item strong {
+    color: #475569;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 4px;
+}
+.review-item span {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+}
 </style>
 </head>
 

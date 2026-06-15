@@ -3,387 +3,360 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Student Voting Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+/* ── Dynamic Theme Variables (Super Charged Accents) ── */
+:root {
+    --theme: #4f46e5; 
+    --theme-glow: rgba(79, 70, 229, 0.15);
+    --theme-border: rgba(79, 70, 229, 0.4);
 }
 
-body{
-    background:#111827;
-    color:white;
-
-    min-height:100vh;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
-.container{
-    width:90%;
-    max-width:800px;
-
-    background:#1f2937;
-
-    padding:30px;
-
-    border-radius:16px;
+body {
+    /* OFFLINE FLASK PATH FOR LOCAL STATIC SERVER IMAGE */
+    background-image: url('{{ url_for("static", filename="school.jpg") }}');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #0f172a;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
 }
 
-#progress{
-    color:#9ca3af;
-    margin-bottom:15px;
+/* Dark layout tint so the premium glass elements break away beautifully */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
+    z-index: 0;
 }
 
-h1{
-    margin-bottom:25px;
+/* ── Elite Glassmorphic Box ── */
+.container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 580px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    padding: 40px 32px;
+    border-radius: 24px;
+    box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.05),
+        0 20px 50px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.candidate{
-    background:#374151;
-
-    padding:15px;
-
-    margin-bottom:12px;
-
-    border-radius:10px;
-
-    cursor:pointer;
-
-    transition:0.2s;
+#progress {
+    color: var(--theme);
+    font-weight: 800;
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-.candidate:hover{
-    background:#4b5563;
+h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    color: #0f172a;
 }
 
-.candidate.selected{
-    border:2px solid #60a5fa;
+/* ── Glassmorphic Options ── */
+.candidate {
+    background: rgba(48, 48, 48, 0.062);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    border-radius: 16px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #1e293b;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
-.controls{
-    margin-top:25px;
-
-    display:flex;
-    justify-content:space-between;
+.candidate:hover {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
 }
 
-button{
-    border:none;
-    border-radius:10px;
-
-    padding:12px 20px;
-
-    cursor:pointer;
+/* Vivid Glowing Selections */
+.candidate.selected {
+    background: var(--theme-glow) !important;
+    border-color: var(--theme-border) !important;
+    color: #000000;
+    box-shadow: 
+        0 0 0 2px var(--theme),
+        0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
-.next-btn{
-    background:#2563eb;
-    color:white;
+.controls {
+    margin-top: 36px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
 }
 
-.prev-btn{
-    background:#374151;
-    color:white;
+/* ── Control System ── */
+button {
+    border: none;
+    border-radius: 14px;
+    padding: 16px 28px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
 }
 
-.review-btn{
-    background:#22c55e;
-    color:white;
+button:active {
+    transform: scale(0.97);
 }
 
+.next-btn, .review-submit-btn {
+    background: var(--theme);
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.next-btn:hover, .review-submit-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+}
+
+.prev-btn, .review-edit-btn {
+    background: rgba(15, 23, 42, 0.08);
+    color: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.prev-btn:hover, .review-edit-btn:hover {
+    background: rgba(15, 23, 42, 0.15);
+}
+
+/* ── Review Modules ── */
+.review-item {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 16px 20px;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    border-left: 5px solid var(--theme);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+}
+.review-item strong {
+    color: #475569;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 4px;
+}
+.review-item span {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+}
 </style>
 </head>
 
 <body>
 
 <div class="container">
-
-    <div id="progress"></div>
-
-    <h1 id="postTitle">
-        Loading...
-    </h1>
-
-    <div id="candidates"></div>
-
-    <div class="controls">
-
-        <button
-            class="prev-btn"
-            onclick="previousPost()">
-
-            Previous
-
-        </button>
-
-        <button
-            class="next-btn"
-            onclick="nextPost()">
-
-            Next
-
-        </button>
-
+    <div id="voting-section">
+        <div id="progress"></div>
+        <h1 id="postTitle">Loading...</h1>
+        <div id="candidates"></div>
+        
+        <div class="controls">
+            <button class="prev-btn" onclick="previousPost()">Back</button>
+            <button class="next-btn" onclick="nextPost()">Next</button>
+        </div>
     </div>
 
+    <div id="review-section" style="display: none;">
+        <h1>Review Your Votes</h1>
+        <div id="review-list"></div>
+
+        <div class="controls">
+            <button class="review-edit-btn" onclick="editVotes()">Edit Votes</button>
+            <button class="review-submit-btn" onclick="submitBallot()">Submit Ballot</button>
+        </div>
+    </div>
 </div>
 
 <script>
+// Grab URL params
+const params = new URLSearchParams(window.location.search);
+const house = params.get("house");
 
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
+// Set Theme Colors Based on House (HYPER ACCENTS)
+const root = document.documentElement;
+const h = house ? house.toLowerCase() : '';
 
-const house =
-    params.get("house");
+if (h === 'agni') {
+    root.style.setProperty('--theme', '#ff1e1e'); // Hyper Crimson
+    root.style.setProperty('--theme-glow', 'rgba(255, 30, 30, 0.15)');
+    root.style.setProperty('--theme-border', 'rgba(255, 30, 30, 0.4)');
+} else if (h === 'vayu') {
+    root.style.setProperty('--theme', '#ffaa00'); // Ultra Vivid Amber Gold
+    root.style.setProperty('--theme-glow', 'rgba(255, 170, 0, 0.15)');
+    root.style.setProperty('--theme-border', 'rgba(255, 170, 0, 0.4)');
+} else if (h === 'prithvi') {
+    root.style.setProperty('--theme', '#00c853'); // Vibrant Neon Green
+    root.style.setProperty('--theme-glow', 'rgba(0, 200, 83, 0.15)');
+    root.style.setProperty('--theme-border', 'rgba(0, 200, 83, 0.4)');
+} else if (h === 'jalam') {
+    root.style.setProperty('--theme', '#0066ff'); // Electric Pure Blue
+    root.style.setProperty('--theme-glow', 'rgba(0, 102, 255, 0.15)');
+    root.style.setProperty('--theme-border', 'rgba(0, 102, 255, 0.4)');
+}
 
 let posts = [];
-
 let currentPost = 0;
-
 let ballot = {};
 
-async function loadBallot(){
-
-    const response =
-        await fetch(
-            `/vote/ballot/student/${house}`
-        );
-
-    const data =
-        await response.json();
-
-    posts = data.posts;
-
-    renderPost();
-
+async function loadBallot() {
+    try {
+        const response = await fetch(`/vote/ballot/student/${house}`);
+        const data = await response.json();
+        posts = data.posts;
+        renderPost();
+    } catch (e) {
+        console.error("Error loading ballot:", e);
+        document.getElementById('postTitle').innerText = "Error loading ballot.";
+    }
 }
 
-function renderPost(){
+function renderPost() {
+    const post = posts[currentPost];
+    
+    document.getElementById("progress").innerText = `Post ${currentPost + 1} of ${posts.length}`;
+    document.getElementById("postTitle").innerText = post.title;
 
-    const post =
-        posts[currentPost];
-
-    document
-        .getElementById(
-            "progress"
-        )
-        .innerText =
-        `Post ${currentPost+1} of ${posts.length}`;
-
-    document
-        .getElementById(
-            "postTitle"
-        )
-        .innerText =
-        post.title;
-
-    const container =
-        document.getElementById(
-            "candidates"
-        );
-
+    const container = document.getElementById("candidates");
     container.innerHTML = "";
 
-    post.candidates.forEach(
-        candidate => {
+    post.candidates.forEach(candidate => {
+        const div = document.createElement("div");
+        div.className = "candidate";
 
-        const div =
-            document.createElement(
-                "div"
-            );
-
-        div.className =
-            "candidate";
-
-        if(
-            ballot[post.id]
-            === candidate.id
-        ){
-            div.classList.add(
-                "selected"
-            );
+        if (ballot[post.id] === candidate.id) {
+            div.classList.add("selected");
         }
 
-        div.innerText =
-            candidate.name;
+        div.innerText = candidate.name;
 
         div.onclick = () => {
-
-            ballot[post.id] =
-                candidate.id;
-
-            renderPost();
-
+            ballot[post.id] = candidate.id;
+            renderPost(); 
         };
 
-        container.appendChild(
-            div
-        );
-
+        container.appendChild(div);
     });
-
 }
 
-function nextPost(){
-
-    if(
-        !ballot[
-            posts[currentPost].id
-        ]
-    ){
-        alert(
-            "Please select a candidate."
-        );
+function nextPost() {
+    if (!ballot[posts[currentPost].id]) {
+        alert("Please select a candidate before moving forward.");
         return;
     }
 
-    if(
-        currentPost
-        <
-        posts.length - 1
-    ){
+    if (currentPost < posts.length - 1) {
         currentPost++;
         renderPost();
-    }
-    else{
+    } else {
         showReview();
     }
-
 }
 
-function previousPost(){
-
-    if(
-        currentPost > 0
-    ){
+function previousPost() {
+    if (currentPost > 0) {
         currentPost--;
         renderPost();
     }
-
 }
 
-function showReview(){
+function showReview() {
+    document.getElementById("voting-section").style.display = "none";
+    document.getElementById("review-section").style.display = "block";
 
-    let html =
-        "<h1>Review Ballot</h1>";
+    const reviewList = document.getElementById("review-list");
+    let html = "";
 
     posts.forEach(post => {
-
-        const candidate =
-            post.candidates.find(
-                c =>
-                c.id ===
-                ballot[post.id]
-            );
-
+        const candidate = post.candidates.find(c => c.id === ballot[post.id]);
         html += `
-            <div class="candidate">
-                <strong>
-                    ${post.title}
-                </strong>
-                <br>
-                ${candidate.name}
+            <div class="review-item">
+                <strong>${post.title}</strong>
+                <span>${candidate ? candidate.name : "None selected"}</span>
             </div>
         `;
-
     });
 
-    html += `
-        <button
-            class="review-btn"
-            onclick="submitBallot()">
-
-            Submit Ballot
-
-        </button>
-    `;
-
-    document.querySelector(
-        ".container"
-    ).innerHTML =
-        html;
-
+    reviewList.innerHTML = html;
 }
 
-async function submitBallot(){
+function editVotes() {
+    document.getElementById("review-section").style.display = "none";
+    document.getElementById("voting-section").style.display = "block";
+    currentPost = 0; 
+    renderPost();
+}
 
+async function submitBallot() {
     const votes = [];
-
-    for(
-        const postId
-        in ballot
-    ){
-
+    for (const postId in ballot) {
         votes.push({
-
-            post_id:
-                parseInt(postId),
-
-            candidate_id:
-                ballot[postId]
-
+            post_id: parseInt(postId),
+            candidate_id: ballot[postId]
         });
-
     }
 
-    const response =
-        await fetch(
-            "/vote/submit",
-            {
-                method:"POST",
+    const response = await fetch("/vote/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            voter_type: "student",
+            votes: votes
+        })
+    });
 
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
+    const result = await response.json();
 
-            body:JSON.stringify({
-
-                voter_type:
-                    "student",
-
-                votes:votes
-
-            })
-            }
-        );
-
-    const result =
-        await response.json();
-
-    if(result.success){
-
-        alert(
-            `Vote Submitted Successfully\n\nBallot ID:\n${result.ballot_id}`
-        );
-
-        window.location.href =
-            "/";
-
+    if (result.success) {
+        alert(`Vote Submitted Successfully!\n\nBallot ID:\n${result.ballot_id}`);
+        window.location.href = "/";
+    } else {
+        alert(result.message);
     }
-    else{
-
-        alert(
-            result.message
-        );
-
-    }
-
 }
 
 loadBallot();
-
 </script>
-
 </body>
 </html>
