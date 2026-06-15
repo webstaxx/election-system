@@ -434,6 +434,55 @@ body {
   border-radius: 6px;
 }
 
+/* ── Compact candidate table ── */
+.cand-table {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.cand-table-header {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  padding: 7px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
+
+.cand-table-header span {
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cand-table-header span:not(:first-child) {
+  text-align: right;
+  min-width: 52px;
+}
+
+/* Override cand-row inside the table */
+.cand-table .cand-row {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  transition: background .15s;
+}
+
+.cand-table .cand-row:last-child { border-bottom: none; }
+
+.cand-table .winner-row {
+  border-left-color: var(--green);
+  background: rgba(34,197,94,.04);
+}
+
+/* keep bar subtle inside the table */
+.cand-table .bar-track { height: 3px; margin-top: 6px; }
+
 /* ══════════════════════════════════════════════════════════
    PRINT SECTION
 ══════════════════════════════════════════════════════════ */
@@ -734,6 +783,11 @@ function render(data) {
 
   const results = data.results || [];
 
+  /* ── Filter: only posts with at least one vote cast ── */
+  const activeResults = results.filter(post =>
+    (post.candidates || []).reduce((s, c) => s + c.votes, 0) > 0
+  );
+
   /* ── Derived data ── */
   let totalVotes = 0, totalCands = 0;
   let topName = '—', topVotes = 0;
@@ -743,7 +797,7 @@ function render(data) {
   const allCandidates = []; /* {name, votes, post} */
   const postTotals    = []; /* {title, total} */
 
-  results.forEach(post => {
+  activeResults.forEach(post => {
     const cands = post.candidates || [];
     const postTotal = cands.reduce((s, c) => s + c.votes, 0);
     totalVotes  += postTotal;
@@ -775,7 +829,7 @@ function render(data) {
 
   /* ── Stats cards ── */
   document.getElementById('statTotalVotes').textContent = fmt(totalVotes);
-  document.getElementById('statTotalPosts').textContent = results.length;
+  document.getElementById('statTotalPosts').textContent = activeResults.length;
   document.getElementById('statTotalCands').textContent = totalCands;
   document.getElementById('statAvgVotes').textContent   = avgVotes;
   document.getElementById('statTopName').textContent    = topName;
@@ -793,7 +847,7 @@ function render(data) {
   buildDoughnutChart(allCandidates);
 
   /* ── Results cards ── */
-  buildResultCards(results);
+  buildResultCards(activeResults);
 }
 
 /* ── Chart 1: Top candidates bar ─────────────────── */
@@ -942,7 +996,7 @@ function buildResultCards(results) {
   grid.innerHTML = '';
 
   results.forEach(post => {
-    const cands    = post.candidates || [];
+    const cands     = post.candidates || [];
     const postTotal = cands.reduce((s, c) => s + c.votes, 0);
 
     const card = document.createElement('div');
@@ -956,13 +1010,25 @@ function buildResultCards(results) {
       </div>
     `;
 
-    /* candidates */
+    /* compact candidate table */
+    const table = document.createElement('div');
+    table.className = 'cand-table';
+
+    /* column header */
+    table.innerHTML = `
+      <div class="cand-table-header">
+        <span>Candidate</span>
+        <span>Votes</span>
+        <span>Share</span>
+      </div>
+    `;
+
     cands.forEach((c, i) => {
-      const p    = postTotal ? (c.votes / postTotal * 100).toFixed(1) : 0;
-      const isW  = i === 0;
+      const p   = postTotal ? (c.votes / postTotal * 100).toFixed(1) : 0;
+      const isW = i === 0;
 
       const row = document.createElement('div');
-      row.className = 'cand-row';
+      row.className = 'cand-row' + (isW ? ' winner-row' : '');
       row.innerHTML = `
         <div class="cand-top">
           <div class="cand-name-group">
@@ -980,10 +1046,12 @@ function buildResultCards(results) {
                style="width:${p}%"></div>
         </div>
       `;
-      card.appendChild(row);
+      table.appendChild(row);
     });
 
-    /* margin row */
+    card.appendChild(table);
+
+    /* margin chip */
     if (cands.length >= 2) {
       const margin = cands[0].votes - cands[1].votes;
       const mRow = document.createElement('div');
