@@ -4,452 +4,193 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Council Election 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root {
-    --bg-dark: #070a12;
-    --card-bg: rgba(255, 255, 255, 0.02);
-    --card-border: rgba(255, 255, 255, 0.06);
-    --card-blur: 16px;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    -webkit-font-smoothing: antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
 body {
+    /* OFFLINE FLASK PATH FOR LOCAL STATIC SERVER IMAGE */
     background-image: url('{{ url_for("static", filename="school.jpg") }}');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    background-color: var(--bg-dark);
+    color: #0f172a;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     position: relative;
-    padding: 40px 20px;
-    overflow-x: hidden;
+    padding: 20px;
 }
 
-/* Layered Premium Dark Overlays */
+/* Dark layout tint so the premium glass elements break away beautifully */
 body::before {
     content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.75) 0%, rgba(7, 10, 18, 0.95) 100%);
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
     z-index: 0;
 }
 
-/* Subtle Tactical Grid Overlay */
-.bg-grid {
-    position: fixed;
-    inset: 0;
-    background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 60px 60px;
-    background-position: center center;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Ambient Floating Glow Points */
-.ambient-glow {
-    position: fixed;
-    top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
-    z-index: 1;
-    pointer-events: none;
-    filter: blur(40px);
-}
-
-/* Central Portal Layout Wrapper */
-.portal-container {
+/* ── Elite Glassmorphic Portal Container ── */
+.container {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     width: 100%;
-    max-width: 680px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    max-width: 580px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    padding: 45px 35px;
+    border-radius: 24px;
+    box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.05),
+        0 20px 50px rgba(0, 0, 0, 0.15),
+        inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.4);
     text-align: center;
 }
 
-/* ── Hero Section ── */
-.hero-section {
-    margin-bottom: 40px;
-}
-
-.title-header {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 12px;
-}
-
 h1 {
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1.15;
-    background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.04em;
+    margin-bottom: 8px;
+    color: #0f172a;
 }
 
 .subtitle {
-    color: var(--text-secondary);
-    font-size: 1.05rem;
-    font-weight: 400;
-    margin-top: 14px;
-    letter-spacing: -0.01em;
-}
-
-/* ── Live Election Status Badge ── */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 100px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(4px);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-secondary);
+    color: #334155;
     font-weight: 600;
-    margin-top: 24px;
-    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--text-muted);
-    transition: all 0.5s ease;
-}
-
-/* Dynamic State Styling */
-.status-badge.open {
-    border-color: rgba(16, 185, 129, 0.2);
-    background: rgba(16, 185, 129, 0.03);
-    color: #10b981;
-}
-.status-badge.open .status-dot {
-    background: #10b981;
-    box-shadow: 0 0 12px #10b981;
-    animation: statusPulse 2s infinite;
-}
-
-.status-badge.closed {
-    border-color: rgba(239, 68, 68, 0.2);
-    background: rgba(239, 68, 68, 0.03);
-    color: #ef4444;
-}
-.status-badge.closed .status-dot {
-    background: #ef4444;
-}
-
-@keyframes statusPulse {
-    0% { transform: scale(0.95); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 1; }
-    100% { transform: scale(0.95); opacity: 0.5; }
+    font-size: 1.05rem;
+    margin-bottom: 35px;
 }
 
 /* ── House Grid Layout ── */
 .house-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    width: 100%;
-    margin-bottom: 32px;
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-@media (max-width: 580px) {
-    .house-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-}
-
-/* Premium Command Access Cards */
-.house-card {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-    backdrop-filter: blur(var(--card-blur));
-    -webkit-backdrop-filter: blur(var(--card-blur));
-    border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 30px 24px;
-    text-align: left;
+/* Base Glassmorphic Button Design */
+.house-btn {
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(5px);
+    color: #1e293b;
+    font-size: 1.1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-/* Subtle Card Interior Geometric Accent */
-.house-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, var(--theme), transparent);
-    opacity: 0.3;
-    transition: opacity 0.4s ease;
-}
-
-/* Real-time Spotlight Mouse Tracking Glow placeholder */
-.house-card-glow {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), var(--theme-glow), transparent 40%);
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-.house-card:hover .house-card-glow {
-    opacity: 1;
-}
-
-.house-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--theme-border);
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.2),
-        0 0 24px var(--theme-glow),
-        inset 0 1px 1px rgba(255, 255, 255, 0.1);
-}
-
-.house-card:active {
-    transform: translateY(-1px);
-}
-
-.house-info {
-    position: relative;
-    z-index: 1;
-}
-
-.house-name {
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    color: var(--text-primary);
-    margin-bottom: 8px;
-    transition: color 0.3s ease;
-}
-
-.house-card:hover .house-name {
-    color: var(--text-primary);
-}
-
-.house-tagline {
-    font-size: 0.85rem;
-    color: var(--text-secondary);
-    font-weight: 400;
-    line-height: 1.45;
-    transition: color 0.3s ease;
-}
-
-.house-card:hover .house-tagline {
-    color: #e2e8f0;
-}
-
-/* Strategic Technical Accent Details */
-.card-terminal-tag {
-    position: relative;
-    z-index: 1;
-    margin-top: 24px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
 }
 
-.card-terminal-tag::before {
-    content: '';
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--theme);
+.house-btn:active {
+    transform: scale(0.97);
 }
 
-/* Individual Elemental Node Themes */
-.house-card.agni {
-    --theme: #c2410c;
-    --theme-glow: rgba(194, 65, 12, 0.08);
-    --theme-border: rgba(194, 65, 12, 0.35);
-}
-.house-card.jalam {
-    --theme: #2563eb;
-    --theme-glow: rgba(37, 99, 235, 0.08);
-    --theme-border: rgba(37, 99, 235, 0.35);
-}
-.house-card.vayu {
-    --theme: #d97706;
-    --theme-glow: rgba(217, 119, 6, 0.08);
-    --theme-border: rgba(217, 119, 6, 0.35);
-}
-.house-card.prithvi {
-    --theme: #059669;
-    --theme-glow: rgba(5, 150, 105, 0.08);
-    --theme-border: rgba(5, 150, 105, 0.35);
+/* Custom Individual Elemental Glows on Hover */
+.house-btn.agni-btn:hover {
+    background: rgba(255, 30, 30, 0.15);
+    border-color: rgba(255, 30, 30, 0.4);
+    box-shadow: 0 0 0 2px #ff1e1e, 0 8px 20px rgba(255, 30, 30, 0.15);
+    transform: translateY(-2px);
+    color: #000000;
 }
 
-/* ── Teacher Portal Secondary Interface ── */
-.teacher-container {
-    width: 100%;
-    margin-top: 12px;
+.house-btn.jalam-btn:hover {
+    background: rgba(0, 102, 255, 0.15);
+    border-color: rgba(0, 102, 255, 0.4);
+    box-shadow: 0 0 0 2px #0066ff, 0 8px 20px rgba(0, 102, 255, 0.15);
+    transform: translateY(-2px);
+    color: #000000;
 }
 
+.house-btn.vayu-btn:hover {
+    background: rgba(255, 170, 0, 0.15);
+    border-color: rgba(255, 170, 0, 0.4);
+    box-shadow: 0 0 0 2px #ffaa00, 0 8px 20px rgba(255, 170, 0, 0.15);
+    transform: translateY(-2px);
+    color: #000000;
+}
+
+.house-btn.prithvi-btn:hover {
+    background: rgba(0, 200, 83, 0.15);
+    border-color: rgba(0, 200, 83, 0.4);
+    box-shadow: 0 0 0 2px #00c853, 0 8px 20px rgba(0, 200, 83, 0.15);
+    transform: translateY(-2px);
+    color: #000000;
+}
+
+/* ── Solid Purple Teacher Button ── */
 .teacher-btn {
     width: 100%;
     padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    border: none;
     border-radius: 14px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.00) 100%);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    background: #8b5cf6; /* Matches teacher portal badge exactly */
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 16px rgba(139, 92, 246, 0.3);
 }
 
 .teacher-btn:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.12);
-    color: var(--text-primary);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 22px rgba(139, 92, 246, 0.45);
 }
 
 .teacher-btn:active {
-    transform: scale(0.99);
+    transform: scale(0.98);
 }
 
-/* ── Institutional Footer ── */
+/* ── Footer ── */
 .footer {
-    margin-top: 60px;
-    position: relative;
-    z-index: 2;
-}
-
-.footer-line-1 {
-    color: #e2e8f0;
+    margin-top: 30px;
+    color: #475569;
     font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    margin-bottom: 6px;
-}
-
-.footer-line-2 {
-    color: var(--text-muted);
-    font-size: 0.7rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 1px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg-grid"></div>
-<div class="ambient-glow"></div>
+<div class="container">
+    <h1>Student Council Election 2026</h1>
+    <p class="subtitle">Select your house to begin voting</p>
 
-<div class="portal-container">
-    
-    <header class="hero-section">
-        <p class="title-header">Secure Voting Environment</p>
-        <h1>STUDENT COUNCIL ELECTION<br>2026</h1>
-        <p class="subtitle">Select your House to Access the Voting Portal</p>
-        
-        <div id="status-badge" class="status-badge">
-            <span class="status-dot"></span>
-            <span id="status-text">Initializing Gateway...</span>
-        </div>
-    </header>
+    <div class="house-grid">
+        <button class="house-btn agni-btn" onclick="selectHouse('agni')">🔥 Agni</button>
+        <button class="house-btn jalam-btn" onclick="selectHouse('jalam')">💧 Jalam</button>
+        <button class="house-btn vayu-btn" onclick="selectHouse('vayu')">🌪️ Vayu</button>
+        <button class="house-btn prithvi-btn" onclick="selectHouse('prithvi')">🌱 Prithvi</button>
+    </div>
 
-    <main class="house-grid">
-        <div class="house-card agni" onclick="selectHouse('agni')" role="button" tabindex="0">
-            <div class="house-card-glow"></div>
-            <div class="house-info">
-                <div class="house-name">AGNI</div>
-                <div class="house-tagline">Leadership Through Courage</div>
-            </div>
-            <div class="card-terminal-tag">Terminal 01</div>
-        </div>
+    <button class="teacher-btn" onclick="teacherPortal()">Teacher Portal</button>
 
-        <div class="house-card jalam" onclick="selectHouse('jalam')" role="button" tabindex="0">
-            <div class="house-card-glow"></div>
-            <div class="house-info">
-                <div class="house-name">JALAM</div>
-                <div class="house-tagline">Wisdom Through Clarity</div>
-            </div>
-            <div class="card-terminal-tag">Terminal 02</div>
-        </div>
-
-        <div class="house-card vayu" onclick="selectHouse('vayu')" role="button" tabindex="0">
-            <div class="house-card-glow"></div>
-            <div class="house-info">
-                <div class="house-name">VAYU</div>
-                <div class="house-tagline">Excellence Through Aspiration</div>
-            </div>
-            <div class="card-terminal-tag">Terminal 03</div>
-        </div>
-
-        <div class="house-card prithvi" onclick="selectHouse('prithvi')" role="button" tabindex="0">
-            <div class="house-card-glow"></div>
-            <div class="house-info">
-                <div class="house-name">PRITHVI</div>
-                <div class="house-tagline">Strength Through Stability</div>
-            </div>
-            <div class="card-terminal-tag">Terminal 04</div>
-        </div>
-    </main>
-
-    <section class="teacher-container">
-        <button class="teacher-btn" onclick="teacherPortal()">Administrative Portal</button>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-line-1">Sandeepani Vidya Nikethan</div>
-        <div class="footer-line-2">Student Leadership Council</div>
-    </footer>
+    <div class="footer">Sandeepani Vidya Nikethan</div>
 </div>
 
 <script>
-// Route Execution Standard Logic
 function selectHouse(house) {
     window.location.href = `/student?house=${house}`;
 }
@@ -457,56 +198,6 @@ function selectHouse(house) {
 function teacherPortal() {
     window.location.href = "/teacher";
 }
-
-// Interactive Spotlight Logic for Cards
-document.querySelectorAll('.house-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-    });
-});
-
-// Asynchronous Dynamic System Status Retrieval
-document.addEventListener('DOMContentLoaded', () => {
-    const statusBadge = document.getElementById('status-badge');
-    const statusText = document.getElementById('status-text');
-
-    fetch('/admin/status')
-        .then(response => {
-            if (!response.ok) throw new Error('Dynamic validation error');
-            const contentType = response.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-                return response.json();
-            } else {
-                return response.text();
-            }
-        })
-        .then(data => {
-            let isOpen = false;
-            if (typeof data === 'object' && data !== null) {
-                isOpen = data.status && data.status.toLowerCase().includes('open');
-            } else if (typeof data === 'string') {
-                isOpen = data.toLowerCase().includes('open');
-            }
-
-            if (isOpen) {
-                statusBadge.className = 'status-badge open';
-                statusText.textContent = 'Election Open';
-            } else {
-                statusBadge.className = 'status-badge closed';
-                statusText.textContent = 'Election Closed';
-            }
-        })
-        .catch(err => {
-            console.warn('Status endpoint connection failed. Defaulting to safe state.', err);
-            // Default configuration safely preserved if route requires specific active authorization
-            statusBadge.className = 'status-badge closed';
-            statusText.textContent = 'Election Closed';
-        });
-});
 </script>
 
 </body>
