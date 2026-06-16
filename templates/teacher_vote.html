@@ -233,10 +233,15 @@ let currentPost = 0;
 let ballot = {};
 
 async function loadBallot(){
-    const response = await fetch("/vote/ballot/teacher");
-    const data = await response.json();
-    posts = data.posts;
-    renderPost();
+    try {
+        const response = await fetch("/vote/ballot/teacher");
+        const data = await response.json();
+        posts = data.posts;
+        renderPost();
+    } catch (e) {
+        console.error("Error loading ballot:", e);
+        document.getElementById('postTitle').innerText = "Error loading ballot.";
+    }
 }
 
 function renderPost(){
@@ -352,7 +357,7 @@ async function submitBallot(){
 
     if(result.success){
         alert(`Vote Submitted Successfully\n\nBallot ID:\n${result.ballot_id}`);
-        window.location.href = "/";
+        window.location.href = window.location.pathname;
     }
     else{
         alert(result.message);
