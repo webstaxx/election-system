@@ -418,6 +418,92 @@ body::before {
   .house-name, .footer-dot { transition: none; animation: none; }
 }
 
+/* ── Floating Teacher Portal Widget ── */
+.teacher-widget-container {
+  position: fixed;
+  bottom: 62px; /* Perfectly aligns with the bottom spacing of the card grid zone */
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+}
+
+/* Vertical Text Strip Panel */
+.teacher-widget-text {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.45em;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  opacity: 0;
+  max-height: 0;
+  transform: translateY(10px);
+  transition: 
+    opacity 0.24s var(--ease), 
+    max-height 0.28s var(--ease), 
+    transform 0.24s var(--ease), 
+    margin-bottom 0.24s var(--ease);
+  pointer-events: none;
+  margin-bottom: 0;
+}
+
+/* Glass Icon Button Container */
+.teacher-widget-btn {
+  width: 35px;
+  height: 35px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: 
+    background 0.22s var(--ease), 
+    border-color 0.22s var(--ease), 
+    color 0.22s var(--ease), 
+    transform 0.22s var(--ease);
+}
+
+/* Expansion Trigger Pipeline on Container Hover */
+.teacher-widget-container:hover .teacher-widget-text {
+  opacity: 1;
+  max-height: 120px; /* Comfortably clears space for the lettering downward stack */
+  transform: translateY(0);
+  margin-bottom: 12px;
+}
+
+.teacher-widget-container:hover .teacher-widget-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+}
+
+.teacher-widget-btn:active {
+  transform: scale(0.92);
+}
+
+.teacher-widget-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Responsive alignment for small viewports */
+@media (max-width: 480px) {
+  .teacher-widget-container {
+    bottom: 40px;
+    right: 16px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -547,6 +633,20 @@ body::before {
     <span class="footer-text" id="footerStatus">
         Checking Election Status...
     </span>
+    </div>
+
+    <!-- Floating Teacher Portal Dynamic Widget -->
+    <div class="teacher-widget-container">
+      <div class="teacher-widget-text">TEACHER</div>
+      <a href="/teacher" class="teacher-widget-btn" aria-label="Go to Teacher Voting Portal">
+        <!-- Clean Minimalist Blackboard / Screen SVG Icon Layout -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+          <line x1="7" y1="21" x2="17" y2="21" />
+        </svg>
+      </a>
     </div>
 
 <script>

@@ -3,16 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-<title>Teacher Voting Portal</title>
+<title>Teacher Voting Portal · Sandeepani Vidya Nikethan</title>
 
 <style>
-/* ── Dynamic Theme Variables (Super Charged Purple Accents) ── */
+/* ── Corporate Executive Light Tokens ── */
 :root {
-    --theme: #8b5cf6; /* Pure Royal Purple */
-    --theme-glow: rgba(139, 92, 246, 0.15);
-    --theme-border: rgba(139, 92, 246, 0.4);
+    --theme: #6d28d9; /* Deep Institutional Purple */
+    --theme-hover: #8b5cf6; /* Royal Purple Accent */
+    --theme-glow: rgba(109, 40, 217, 0.08);
+    --theme-border: rgba(109, 40, 217, 0.35);
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -23,211 +29,520 @@
 }
 
 body {
-    /* OFFLINE FLASK PATH FOR LOCAL STATIC SERVER IMAGE */
+    min-height: 100vh;
     background-image: url('{{ url_for("static", filename="school.jpg") }}');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
-    color: #0f172a;
-    min-height: 100vh;
+    color: var(--text-main);
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 40px 24px;
     position: relative;
-    padding: 20px;
+    overflow-x: hidden;
 }
 
-/* Dark layout tint so the premium glass elements break away beautifully */
+/* Premium Light Tint Overlay for Background Image */
 body::before {
     content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.45) 100%);
     z-index: 0;
 }
 
-/* ── Elite Glassmorphic Box ── */
-.container {
+/* ── Executive Console Container (Much Smaller Width) ── */
+.console-container {
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 580px;
-    background: rgba(255, 255, 255, 0.45);
-    backdrop-filter: blur(25px) saturate(180%);
-    -webkit-backdrop-filter: blur(25px) saturate(180%);
-    padding: 40px 32px;
-    border-radius: 24px;
-    box-shadow: 
-        0 4px 30px rgba(0, 0, 0, 0.05),
-        0 20px 50px rgba(0, 0, 0, 0.15),
-        inset 0 1px 1px rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    text-align: center;
+    max-width: 640px; /* Substantially tighter, premium dashboard-card width */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.5s var(--ease);
 }
 
-/* ── Premium Teacher Portal Badge ── */
-.teacher-badge {
-    display: inline-block;
-    background: var(--theme); /* Solid pure purple matching the accent theme */
-    color: #ffffff;
-    padding: 6px 14px;
-    border-radius: 999px;
-    margin-bottom: 12px;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-#progress {
-    color: var(--theme);
-    font-weight: 800;
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-bottom: 28px;
-    color: #0f172a;
-}
-
-/* ── Glassmorphic Options ── */
-.candidate {
-    background: rgba(255, 255, 255, 0.35);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 18px 22px;
-    margin-bottom: 14px;
-    border-radius: 16px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: #1e293b;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-    text-align: left;
-}
-
-.candidate:hover {
-    background: rgba(255, 255, 255, 0.6);
-    border-color: rgba(255, 255, 255, 0.8);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
-}
-
-/* Vivid Glowing Selections (Purple Mode) */
-.candidate.selected {
-    background: var(--theme-glow) !important;
-    border-color: var(--theme-border) !important;
-    color: #000000;
-    box-shadow: 
-        0 0 0 2px var(--theme),
-        0 8px 20px rgba(0, 0, 0, 0.06);
-}
-
-.controls {
-    margin-top: 36px;
+/* ════════════════════════════════════════
+   ZONE A — Integrated Premium Header Panel
+════════════════════════════════════════ */
+.zone-a-header {
+    width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 20px 28px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
     gap: 16px;
 }
 
-/* ── Control System ── */
+.school-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 10px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+}
+
+.institution-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.school-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-main);
+}
+
+.election-title {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.header-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.teacher-badge {
+    background: linear-gradient(135deg, var(--theme) 0%, var(--theme-hover) 100%);
+    color: #ffffff;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+}
+
+#progress {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--theme);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════
+   ZONE B — Architectural Main Panel
+════════════════════════════════════════ */
+.zone-b-main {
+    position: relative;
+    width: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 36px 40px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+h1#postTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--text-main);
+    margin-bottom: 28px;
+    border-left: 4px solid var(--theme);
+    padding-left: 16px;
+    line-height: 1.1;
+}
+
+/* Horizontal Premium Row Layout */
+#candidates {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.candidate {
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 16px 24px;
+    border-radius: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.22s var(--ease);
+}
+
+.candidate:hover {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.candidate-name-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* Radio Dial Style Indicators */
+.selection-indicator {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid rgba(15, 23, 42, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.22s var(--ease);
+    background: transparent;
+}
+
+.selection-indicator::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    transform: scale(0);
+    transition: transform 0.18s var(--ease);
+}
+
+/* Active Highlight States */
+.candidate.selected {
+    background: var(--theme-glow) !important;
+    border-color: var(--theme-border) !important;
+    box-shadow: 0 0 0 1px var(--theme), 0 6px 16px rgba(109, 40, 217, 0.06);
+}
+
+.candidate.selected .selection-indicator {
+    border-color: var(--theme);
+    background: var(--theme);
+}
+
+.candidate.selected .selection-indicator::after {
+    transform: scale(1);
+}
+
+/* ════════════════════════════════════════
+   HOVER PHOTO PREVIEW PANEL (FLYOUT)
+════════════════════════════════════════ */
+#photo-preview-panel {
+    position: absolute;
+    right: -280px; /* Anchored neatly outside the right edge of the main card */
+    top: 50%;
+    transform: translateY(-50%) translateX(-15px);
+    width: 250px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.28s var(--ease);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 10;
+}
+
+#photo-preview-panel.show {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+.img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 210px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(15, 23, 42, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+#preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.2s ease;
+}
+
+#no-photo-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.85rem;
+    display: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#preview-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+/* Hide side flyout on smaller viewports gracefully */
+@media (max-width: 1220px) {
+    #photo-preview-panel {
+        display: none !important;
+    }
+}
+
+/* ════════════════════════════════════════
+   ZONE C — Isolated Navigation Zone
+════════════════════════════════════════ */
+.zone-c-controls {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(15, 23, 42, 0.06);
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+}
+
 button {
     border: none;
-    border-radius: 14px;
-    padding: 16px 28px;
-    font-size: 1rem;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 0.9rem;
     font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s var(--ease);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex: 1;
 }
 
 button:active {
-    transform: scale(0.97);
-}
-
-.next-btn, .review-submit-btn {
-    background: var(--theme);
-    color: white;
-    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.25);
-}
-
-.next-btn:hover, .review-submit-btn:hover {
-    filter: brightness(1.1);
-    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+    transform: scale(0.98);
 }
 
 .prev-btn, .review-edit-btn {
-    background: rgba(15, 23, 42, 0.08);
-    color: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(15, 23, 42, 0.05);
+    color: var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
 .prev-btn:hover, .review-edit-btn:hover {
-    background: rgba(15, 23, 42, 0.15);
+    background: rgba(15, 23, 42, 0.1);
+    color: var(--text-main);
 }
 
-/* ── Review Modules ── */
-.review-item {
-    background: rgba(255, 255, 255, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    padding: 16px 20px;
+.next-btn, .review-submit-btn {
+    background: linear-gradient(135deg, var(--theme) 0%, var(--theme-hover) 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(109, 40, 217, 0.2);
+}
+
+.next-btn:hover, .review-submit-btn:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 6px 18px rgba(109, 40, 217, 0.3);
+}
+
+/* ════════════════════════════════════════
+   EXECUTIVE REVIEW TABLE LAYOUT
+════════════════════════════════════════ */
+.review-table-wrapper {
+    width: 100%;
     border-radius: 14px;
-    margin-bottom: 14px;
-    border-left: 5px solid var(--theme);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.01);
-    text-align: left;
+    overflow: hidden;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255, 255, 255, 0.3);
+    display: none;
+    flex-direction: column;
 }
-.review-item strong {
-    color: #475569;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: block;
-    margin-bottom: 4px;
+
+.review-table-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(15, 23, 42, 0.04);
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
-.review-item span {
-    font-size: 1.15rem;
+
+.th-text {
+    font-size: 0.75rem;
     font-weight: 800;
-    color: #0f172a;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
 }
+
+.review-mode-grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-mode-grid .review-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+    align-items: center;
+}
+
+.review-mode-grid .review-item:last-child {
+    border-bottom: none;
+}
+
+.review-mode-grid .review-item strong {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.review-mode-grid .review-item span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--theme);
+}
+
+@media (max-width: 600px) {
+    .zone-a-header { padding: 16px 20px; }
+    .zone-b-main { padding: 28px 20px; }
+    .review-table-header, .review-mode-grid .review-item { grid-template-columns: 1fr; gap: 4px; }
+    .th-text:last-child { display: none; }
+}
+
+/* Add this to your <style> section */
+.tiny-home-link {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px) saturate(140%);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569; /* Corporate Slate Gray */
+    z-index: 9999;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tiny-home-link:hover {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: #6d28d9; /* Executive Purple Highlight */
+    transform: scale(1.05);
+}
+
+.tiny-home-link:active {
+    transform: scale(0.95);
+}
+
+.tiny-home-link svg {
+    width: 16px;
+    height: 16px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="console-container">
 
-    <div class="teacher-badge">
-        Teacher Portal
-    </div>
+    <!-- ZONE A: Premium Integrated Header -->
+    <header class="zone-a-header">
+        <div class="header-left">
+            <img class="school-logo" src="{{ url_for('static', filename='logo.png') }}" alt="Sandeepani Vidya Nikethan" onerror="this.style.display='none'">
+            <div class="institution-meta">
+                <span class="school-name">Sandeepani Vidya Nikethan</span>
+                <span class="election-title">Student Council Election 2026</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="teacher-badge">Teacher Portal</div>
+            <div id="progress">Loading Context...</div>
+        </div>
+    </header>
 
-    <div id="progress"></div>
+    <!-- ZONE B & C: Main Focused Canvas -->
+    <main class="zone-b-main">
+        
+        <!-- Interactive Flyout Floating Hover Panel -->
+        <div id="photo-preview-panel">
+            <div class="img-wrapper">
+                <img id="preview-img" src="" alt="Candidate Photo">
+                <div id="no-photo-text">No Photo<br>Available</div>
+            </div>
+            <div id="preview-name">Candidate Name</div>
+        </div>
 
-    <h1 id="postTitle">
-        Loading...
-    </h1>
+        <h1 id="postTitle">Loading Ballot Context...</h1>
 
-    <div id="candidates"></div>
+        <!-- Executive Grid Review Matrix Frame -->
+        <div class="review-table-wrapper" id="tableHeaderFrame">
+            <div class="review-table-header">
+                <div class="th-text">Voting Post / Position</div>
+                <div class="th-text">Selected Nominee</div>
+            </div>
+        </div>
 
-    <div class="controls" id="controlBox">
-        <button class="prev-btn" onclick="previousPost()">Previous</button>
-        <button class="next-btn" onclick="nextPost()">Next</button>
-    </div>
+        <!-- Target Injection Component Stack Pipeline -->
+        <div id="candidates"></div>
+
+        <!-- ZONE C: Detached Flow Directional Controller Bar -->
+        <div class="zone-c-controls" id="controlBox">
+            <button class="prev-btn" onclick="previousPost()">Previous</button>
+            <button class="next-btn" onclick="nextPost()">Next</button>
+        </div>
+    </main>
 
 </div>
 
-<script>
+<!-- Place this HTML right before the closing </body> tag -->
+<a href="/" class="tiny-home-link" aria-label="Go to Home">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+</a>
 
+<script>
 let posts = [];
 let currentPost = 0;
 let ballot = {};
@@ -245,7 +560,11 @@ async function loadBallot(){
 }
 
 function renderPost(){
+    // Standard View Cleanups
     document.getElementById("progress").style.display = "block";
+    document.getElementById("tableHeaderFrame").style.display = "none";
+    document.getElementById("photo-preview-panel").classList.remove('show');
+
     document.getElementById("progress").innerText = `Post ${currentPost+1} of ${posts.length}`;
 
     const post = posts[currentPost];
@@ -253,6 +572,7 @@ function renderPost(){
 
     const container = document.getElementById("candidates");
     container.innerHTML = "";
+    container.classList.remove("review-mode-grid");
 
     post.candidates.forEach(candidate => {
         const div = document.createElement("div");
@@ -262,17 +582,47 @@ function renderPost(){
             div.classList.add("selected");
         }
 
-        div.innerText = candidate.name;
+        div.innerHTML = `
+            <span class="candidate-name-text">${candidate.name}</span>
+            <div class="selection-indicator"></div>
+        `;
 
+        // Interactive Choice Logic Integration Pipeline
         div.onclick = () => {
             ballot[post.id] = candidate.id;
             renderPost();
         };
 
+        // Student-inspired Live Flyout Hover Integration Mechanics
+        div.onmouseenter = () => {
+            const panel = document.getElementById('photo-preview-panel');
+            const img = document.getElementById('preview-img');
+            const nameEl = document.getElementById('preview-name');
+            const noPhotoText = document.getElementById('no-photo-text');
+            
+            nameEl.innerText = candidate.name;
+            
+            if (candidate.photo) {
+                img.src = `/static/${candidate.photo}`;
+                img.style.opacity = '1';
+                noPhotoText.style.display = 'none';
+            } else {
+                img.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"/></svg>`;
+                img.style.opacity = '0.25';
+                noPhotoText.style.display = 'block';
+            }
+            
+            panel.classList.add('show');
+        };
+
+        div.onmouseleave = () => {
+            const panel = document.getElementById('photo-preview-panel');
+            panel.classList.remove('show');
+        };
+
         container.appendChild(div);
     });
 
-    // Reset layout navigation context controls
     document.getElementById("controlBox").innerHTML = `
         <button class="prev-btn" onclick="previousPost()">Previous</button>
         <button class="next-btn" onclick="nextPost()">Next</button>
@@ -302,16 +652,19 @@ function previousPost(){
 }
 
 function editBallot() {
-    currentPost = 0; // Bring them right back to page 1
+    currentPost = 0; 
     renderPost();
 }
 
 function showReview(){
     document.getElementById("progress").style.display = "none";
     document.getElementById("postTitle").innerText = "Review Ballot";
+    document.getElementById("tableHeaderFrame").style.display = "flex";
+    document.getElementById("photo-preview-panel").classList.remove('show');
 
     const container = document.getElementById("candidates");
     container.innerHTML = "";
+    container.classList.add("review-mode-grid");
 
     posts.forEach(post => {
         const candidate = post.candidates.find(c => c.id === ballot[post.id]);
@@ -325,7 +678,6 @@ function showReview(){
         container.appendChild(div);
     });
 
-    // Swapping default navigation with explicit Edit vs Submit functionality 
     document.getElementById("controlBox").innerHTML = `
         <button class="review-edit-btn" onclick="editBallot()">Edit Votes</button>
         <button class="review-submit-btn" onclick="submitBallot()">Submit Ballot</button>
@@ -365,7 +717,6 @@ async function submitBallot(){
 }
 
 loadBallot();
-
 </script>
 
 </body>
