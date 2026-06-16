@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Student Council Election 2026 · Sandeepani Vidya Nikethan</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 
 /* ── Reset ──────────────────────────────────────── */
@@ -13,38 +13,27 @@
   box-sizing: border-box;
 }
 
-/* ── Root tokens ────────────────────────────────── */
+/* ── Tokens ─────────────────────────────────────── */
 :root {
-  --agni:          #b91c1c;
-  --agni-glow:     rgba(185,28,28,0.09);
-  --agni-border:   rgba(185,28,28,0.28);
+  --agni:           #b91c1c;
+  --agni-border:    rgba(255, 0, 0, 0.3);
 
-  --jalam:         #1d4ed8;
-  --jalam-glow:    rgba(29,78,216,0.09);
-  --jalam-border:  rgba(29,78,216,0.28);
+  --jalam:          #1d4ed8;
+  --jalam-border:   rgba(29,78,216,0.30);
 
-  --vayu:          #ffb300;
-  --vayu-glow:     rgba(255,179,0,0.15);
-  --vayu-border:   rgba(255,179,0,0.4);
+  --vayu:           #E3940C;
+  --vayu-border:    rgba(180,83,9,0.30);
 
-  --prithvi:       #166534;
-  --prithvi-glow:  rgba(22,101,52,0.09);
-  --prithvi-border:rgba(22,101,52,0.28);
+  --prithvi:        #166534;
+  --prithvi-border: rgba(22,101,52,0.30);
 
-  --glass-white:   rgba(255,255,255,0.62);
-  --glass-card:    rgba(255,255,255,0.46);
-  --glass-border:  rgba(255,255,255,0.72);
-  --ink:           #0f172a;
-  --ink-mid:       #334155;
-  --ink-soft:      #64748b;
-  --ease:          cubic-bezier(0.4,0,0.2,1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ── Full-bleed background ──────────────────────── */
+/* ── Page ───────────────────────────────────────── */
 html, body {
   height: 100%;
   font-family: 'Inter', system-ui, sans-serif;
-  color: var(--ink);
 }
 
 body {
@@ -53,558 +42,381 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  position: relative;
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 40px 20px 48px;
+  position: relative;
 }
 
-/* Dark layout tint so the premium glass elements break away beautifully */
+/* Overlay — darkens photo enough for white text to breathe */
 body::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(circle at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.6) 100%);
-    z-index: 0;
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 15, 35, 0.60) 0%,
+    rgba(8, 15, 35, 0.50) 45%,
+    rgba(8, 15, 35, 0.65) 100%
+  );
+  z-index: 0;
 }
 
-/* ── Outer shell ────────────────────────────────── */
-.shell {
+/* ════════════════════════════════════════
+   ZONE A — Identity, floats on the photo
+════════════════════════════════════════ */
+.zone-a {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  width: 100%;
-  min-height: 100vh;
-}
-
-/* ════════════════════════════════════════════════
-   LEFT PANEL — identity & context
-════════════════════════════════════════════════ */
-.panel-left {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(36px, 6vw, 72px) clamp(32px, 5vw, 64px);
-  background: var(--glass-white);
-  backdrop-filter: blur(28px) saturate(180%);
-  -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border-right: 1px solid var(--glass-border);
-  box-shadow: 4px 0 40px rgba(0,0,0,0.06);
-}
-
-/* ── Logo block ── */
-.logo-block {
-  display: flex;
   align-items: center;
-  gap: 14px;
+  text-align: center;
+  padding-bottom: 36px;
 }
 
-.logo-mark {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(15,23,42,0.22);
-}
-
-/* Simple geometric SVG crest inside the logo mark */
-.logo-mark svg {
-  width: 26px;
-  height: 26px;
-}
-
-.logo-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.logo-name {
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--ink);
-  line-height: 1.2;
-}
-
-.logo-tagline {
-  font-size: .67rem;
-  font-weight: 500;
-  color: var(--ink-soft);
-  letter-spacing: .04em;
-  margin-top: 2px;
-}
-
-/* ── Main identity block ── */
-.identity {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: clamp(40px,6vh,80px) 0;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+.school-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  border-radius: 18px;
+  /* Subtle white ring so logo separates from any dark photo behind it */
+  filter: drop-shadow(0 0 16px rgba(255,255,255,0.22))
+          drop-shadow(0 4px 14px rgba(0,0,0,0.40));
   margin-bottom: 18px;
 }
 
-.eyebrow-line {
-  width: 32px;
-  height: 2px;
-  background: var(--ink-soft);
-  border-radius: 2px;
-}
-
-.eyebrow-text {
-  font-size: .7rem;
+.school-name {
+  font-size: .72rem;
   font-weight: 700;
-  letter-spacing: .16em;
+  letter-spacing: .20em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: rgba(255,255,255,0.70);
+  margin-bottom: 14px;
 }
 
-.main-title {
-  font-size: clamp(2rem, 4.2vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: -.04em;
-  line-height: 1.05;
-  color: var(--ink);
-  margin-bottom: 12px;
-}
-
-.year-badge {
-  display: inline-block;
-  font-size: clamp(4.5rem, 9vw, 7.5rem);
-  font-weight: 900;
-  letter-spacing: -.06em;
-  line-height: .88;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--ink);
-  text-stroke: 2px var(--ink);
-  user-select: none;
-  margin-bottom: 28px;
-}
-
-.description {
-  font-size: .92rem;
-  font-weight: 400;
-  color: var(--ink-mid);
-  line-height: 1.7;
-  max-width: 340px;
-}
-
-/* ── Divider stat row ── */
-.stat-row {
+/* Thin rule flanking the school name */
+.school-name-wrap {
   display: flex;
-  gap: 28px;
-  margin-top: 36px;
-  padding-top: 28px;
-  border-top: 1px solid rgba(15,23,42,0.1);
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
 }
 
-.stat-item {}
+.rule {
+  height: 1px;
+  width: 36px;
+  background: rgba(255,255,255,0.28);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
 
-.stat-value {
-  font-size: 1.35rem;
-  font-weight: 800;
+.portal-title {
+  font-size: clamp(1.65rem, 4.5vw, 2.4rem);
+  font-weight: 900;
   letter-spacing: -.03em;
-  color: var(--ink);
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: .67rem;
-  font-weight: 600;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  margin-top: 4px;
-}
-
-/* ── Footer ── */
-.panel-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer-institution {
-  font-size: .72rem;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.footer-year {
-  font-size: .72rem;
-  font-weight: 500;
-  color: rgba(15,23,42,0.3);
-}
-
-/* ════════════════════════════════════════════════
-   RIGHT PANEL — house selection
-════════════════════════════════════════════════ */
-.panel-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: clamp(32px, 5vw, 60px) clamp(28px, 4.5vw, 56px);
-  gap: 24px;
-}
-
-/* ── Floating prompt ── */
-.select-prompt {
-  text-align: center;
-}
-
-.prompt-label {
-  font-size: .7rem;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.9);
-  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+  line-height: 1.08;
+  color: #ffffff;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.35);
   margin-bottom: 6px;
 }
 
-.prompt-sub {
-  font-size: .82rem;
-  font-weight: 400;
-  color: rgba(255,255,255,0.75);
-  text-shadow: 0 1px 6px rgba(0,0,0,0.35);
+.portal-year {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: rgba(255,255,255,0.52);
 }
 
-/* ── House grid ── */
+/* ════════════════════════════════════════
+   ZONE B — Glass house card panel
+════════════════════════════════════════ */
+.zone-b {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+
+  /* The one glass surface on the page */
+  background: rgba(255,255,255,0.46);
+  backdrop-filter: blur(28px) saturate(175%);
+  -webkit-backdrop-filter: blur(28px) saturate(175%);
+  border: 1px solid rgba(255,255,255,0.64);
+  border-radius: 24px;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.75) inset,
+    0 8px 28px rgba(0,0,0,0.12),
+    0 28px 64px rgba(0,0,0,0.16);
+  padding: 28px 28px 24px;
+}
+
+/* Small prompt above the grid */
+.grid-label {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.grid-label-text {
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+/* 2×2 grid */
 .house-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  width: 100%;
-  max-width: 460px;
+  gap: 12px;
 }
 
-/* ── House card ── */
+/* ── House card (preserved from established system) ── */
 .house-card {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 28px 24px 24px;
-  background: var(--glass-card);
-  backdrop-filter: blur(16px) saturate(160%);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(255,255,255,0.55);
-  border-radius: 18px;
+  padding: 22px 20px 18px;
+  background: rgba(255,255,255,0.52);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.62);
+  border-radius: 16px;
   cursor: pointer;
-  transition:
-    transform          0.26s var(--ease),
-    background         0.26s var(--ease),
-    border-color       0.26s var(--ease),
-    box-shadow         0.26s var(--ease);
-  box-shadow:
-    0 2px 8px  rgba(0,0,0,0.06),
-    0 8px 24px rgba(0,0,0,0.08),
-    inset 0 1px 1px rgba(255,255,255,0.8);
-  text-align: left;
   overflow: hidden;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  transition:
+    transform    .24s var(--ease),
+    background   .24s var(--ease),
+    border-color .24s var(--ease),
+    box-shadow   .24s var(--ease);
+  box-shadow:
+    0 1px 3px  rgba(0,0,0,0.04),
+    0 4px 14px rgba(0,0,0,0.07),
+    inset 0 1px 0 rgba(255,255,255,0.90);
 }
 
-/* Left accent bar — grows in from 0 on hover */
+/* Left accent bar — grows on hover */
 .house-card::before {
   content: '';
   position: absolute;
-  left: 0; top: 16px; bottom: 16px;
+  left: 0; top: 14px; bottom: 14px;
   width: 0;
   border-radius: 0 3px 3px 0;
   background: var(--card-theme);
-  transition: width .24s var(--ease);
+  transition: width .22s var(--ease);
 }
 
 .house-card:hover::before { width: 3px; }
+.house-card:hover { transform: translateY(-3px); }
+.house-card:active { transform: translateY(-1px) scale(0.984); }
 
-/* House icon (letter mark) */
+/* Icon */
 .house-icon {
-  width: 38px; height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
-  background: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.62);
   border: 1px solid var(--card-border);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  transition: background .26s var(--ease), border-color .26s var(--ease);
+  margin-bottom: 14px;
+  flex-shrink: 0;
+  transition: background .22s var(--ease), border-color .22s var(--ease);
 }
 
-.house-icon svg {
-  width: 18px; height: 18px;
+.house-icon svg { width: 20px; height: 20px; }
+
+.house-icon svg path {
+  stroke: #64748b;
+  transition: stroke .22s var(--ease);
 }
 
 .house-name {
-  font-size: 1.35rem;
+  font-size: 1.18rem;
   font-weight: 800;
-  letter-spacing: -.01em;
-  color: var(--ink);
+  letter-spacing: -.015em;
+  color: #0f172a;
   line-height: 1;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   transition: color .2s var(--ease);
 }
 
-.house-cue {
-  font-size: .68rem;
+.house-element {
+  font-size: .63rem;
   font-weight: 600;
-  letter-spacing: .1em;
+  letter-spacing: .10em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  transition: color .2s var(--ease);
+  color: #94a3b8;
 }
 
-/* Arrow reveal */
+/* Arrow circle */
 .house-arrow {
   position: absolute;
-  bottom: 22px; right: 20px;
-  width: 26px; height: 26px;
+  bottom: 16px; right: 16px;
+  width: 28px; height: 28px;
   border-radius: 50%;
   background: transparent;
-  border: 1px solid transparent;
+  border: 1.5px solid rgba(15,23,42,0.12);
   display: flex;
   align-items: center;
   justify-content: center;
   transition:
-    background   .22s var(--ease),
-    border-color .22s var(--ease),
-    transform    .22s var(--ease);
+    background   .2s var(--ease),
+    border-color .2s var(--ease),
+    transform    .2s var(--ease);
 }
 
-.house-arrow svg {
-  width: 13px; height: 13px;
-  stroke: var(--ink-soft);
-  transition: stroke .22s var(--ease);
+.house-arrow svg { width: 12px; height: 12px; }
+
+.house-arrow svg path {
+  stroke: #94a3b8;
+  transition: stroke .2s var(--ease);
 }
 
-/* ── Per-card hover states ── */
-.house-card:hover {
-  transform: translateY(-4px);
-}
+/* ── Per-house hover ── */
+.agni-card  { --card-theme: var(--agni);   --card-border: var(--agni-border);   }
+.jalam-card { --card-theme: var(--jalam);  --card-border: var(--jalam-border);  }
+.vayu-card  { --card-theme: var(--vayu);   --card-border: var(--vayu-border);   }
+.prithvi-card{ --card-theme: var(--prithvi); --card-border: var(--prithvi-border); }
 
-/* Agni */
-.agni-card {
-  --card-theme:  var(--agni);
-  --card-glow:   var(--agni-glow);
-  --card-border: var(--agni-border);
-}
 .agni-card:hover {
-  background:    rgba(185,28,28,0.07);
-  border-color:  var(--agni-border);
-  box-shadow:
-    0 4px 16px rgba(185,28,28,0.12),
-    0 16px 40px rgba(0,0,0,0.12),
-    inset 0 1px 1px rgba(255,255,255,0.6);
+  background: rgba(185,28,28,0.06); border-color: var(--agni-border);
+  box-shadow: 0 4px 20px rgba(185,28,28,0.14), 0 14px 36px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.70);
 }
-.agni-card:hover .house-name { color: var(--agni); }
-.agni-card:hover .house-icon {
-  background:    rgba(185,28,28,0.09);
-  border-color:  var(--agni-border);
-}
-.agni-card:hover .house-icon svg path { stroke: var(--agni); }
-.agni-card:hover .house-arrow {
-  background: var(--agni);
-  border-color: var(--agni);
-}
-.agni-card:hover .house-arrow svg { stroke: #fff; }
+.agni-card:hover .house-name               { color: var(--agni); }
+.agni-card:hover .house-icon               { background: rgba(185,28,28,0.08); border-color: var(--agni-border); }
+.agni-card:hover .house-icon svg path      { stroke: var(--agni); }
+.agni-card:hover .house-arrow              { background: var(--agni); border-color: var(--agni); transform: scale(1.1); }
+.agni-card:hover .house-arrow svg path     { stroke: #fff; }
 
-/* Jalam */
-.jalam-card {
-  --card-theme:  var(--jalam);
-  --card-glow:   var(--jalam-glow);
-  --card-border: var(--jalam-border);
-}
 .jalam-card:hover {
-  background:    rgba(29,78,216,0.07);
-  border-color:  var(--jalam-border);
-  box-shadow:
-    0 4px 16px rgba(29,78,216,0.12),
-    0 16px 40px rgba(0,0,0,0.12),
-    inset 0 1px 1px rgba(255,255,255,0.6);
+  background: rgba(29,78,216,0.06); border-color: var(--jalam-border);
+  box-shadow: 0 4px 20px rgba(29,78,216,0.14), 0 14px 36px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.70);
 }
-.jalam-card:hover .house-name { color: var(--jalam); }
-.jalam-card:hover .house-icon {
-  background:    rgba(29,78,216,0.09);
-  border-color:  var(--jalam-border);
-}
-.jalam-card:hover .house-icon svg path { stroke: var(--jalam); }
-.jalam-card:hover .house-arrow {
-  background: var(--jalam);
-  border-color: var(--jalam);
-}
-.jalam-card:hover .house-arrow svg { stroke: #fff; }
+.jalam-card:hover .house-name              { color: var(--jalam); }
+.jalam-card:hover .house-icon              { background: rgba(29,78,216,0.08); border-color: var(--jalam-border); }
+.jalam-card:hover .house-icon svg path     { stroke: var(--jalam); }
+.jalam-card:hover .house-arrow             { background: var(--jalam); border-color: var(--jalam); transform: scale(1.1); }
+.jalam-card:hover .house-arrow svg path    { stroke: #fff; }
 
-/* Vayu */
-.vayu-card {
-  --card-theme:  var(--vayu);
-  --card-glow:   var(--vayu-glow);
-  --card-border: var(--vayu-border);
-}
 .vayu-card:hover {
-  background:    rgba(180,83,9,0.07);
-  border-color:  var(--vayu-border);
-  box-shadow:
-    0 4px 16px rgba(180,83,9,0.12),
-    0 16px 40px rgba(0,0,0,0.12),
-    inset 0 1px 1px rgba(255,255,255,0.6);
+  background: rgba(180,83,9,0.06); border-color: var(--vayu-border);
+  box-shadow: 0 4px 20px rgba(180,83,9,0.14), 0 14px 36px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.70);
 }
-.vayu-card:hover .house-name { color: var(--vayu); }
-.vayu-card:hover .house-icon {
-  background:    rgba(180,83,9,0.09);
-  border-color:  var(--vayu-border);
-}
-.vayu-card:hover .house-icon svg path { stroke: var(--vayu); }
-.vayu-card:hover .house-arrow {
-  background: var(--vayu);
-  border-color: var(--vayu);
-}
-.vayu-card:hover .house-arrow svg { stroke: #fff; }
+.vayu-card:hover .house-name               { color: var(--vayu); }
+.vayu-card:hover .house-icon               { background: rgba(180,83,9,0.08); border-color: var(--vayu-border); }
+.vayu-card:hover .house-icon svg path      { stroke: var(--vayu); }
+.vayu-card:hover .house-arrow              { background: var(--vayu); border-color: var(--vayu); transform: scale(1.1); }
+.vayu-card:hover .house-arrow svg path     { stroke: #fff; }
 
-/* Prithvi */
-.prithvi-card {
-  --card-theme:  var(--prithvi);
-  --card-glow:   var(--prithvi-glow);
-  --card-border: var(--prithvi-border);
-}
 .prithvi-card:hover {
-  background:    rgba(22,101,52,0.07);
-  border-color:  var(--prithvi-border);
-  box-shadow:
-    0 4px 16px rgba(22,101,52,0.12),
-    0 16px 40px rgba(0,0,0,0.12),
-    inset 0 1px 1px rgba(255,255,255,0.6);
+  background: rgba(22,101,52,0.06); border-color: var(--prithvi-border);
+  box-shadow: 0 4px 20px rgba(22,101,52,0.14), 0 14px 36px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.70);
 }
-.prithvi-card:hover .house-name { color: var(--prithvi); }
-.prithvi-card:hover .house-icon {
-  background:    rgba(22,101,52,0.09);
-  border-color:  var(--prithvi-border);
-}
-.prithvi-card:hover .house-icon svg path { stroke: var(--prithvi); }
-.prithvi-card:hover .house-arrow {
-  background: var(--prithvi);
-  border-color: var(--prithvi);
-}
-.prithvi-card:hover .house-arrow svg { stroke: #fff; }
+.prithvi-card:hover .house-name            { color: var(--prithvi); }
+.prithvi-card:hover .house-icon            { background: rgba(22,101,52,0.08); border-color: var(--prithvi-border); }
+.prithvi-card:hover .house-icon svg path   { stroke: var(--prithvi); }
+.prithvi-card:hover .house-arrow           { background: var(--prithvi); border-color: var(--prithvi); transform: scale(1.1); }
+.prithvi-card:hover .house-arrow svg path  { stroke: #fff; }
 
-/* Active press */
-.house-card:active { transform: translateY(-1px) scale(0.985); }
-
-/* ── Focus visible (keyboard accessibility) ── */
 .house-card:focus-visible {
-  outline: 3px solid rgba(15,23,42,0.5);
+  outline: 3px solid rgba(255,255,255,0.55);
   outline-offset: 3px;
 }
 
-/* ════════════════════════════════════════════════
+/* Footer inside zone B */
+.zone-b-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(15,23,42,0.07);
+}
+
+.footer-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px rgba(34,197,94,0.70);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.30; }
+}
+
+.footer-text {
+  font-size: .65rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+/* ════════════════════════════════════════
    RESPONSIVE
-════════════════════════════════════════════════ */
-@media (max-width: 860px) {
-  .shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-  }
-
-  .panel-left {
-    border-right: none;
-    border-bottom: 1px solid var(--glass-border);
-    padding: 32px 28px 28px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-  }
-
-  .identity { padding: 28px 0; }
-
-  .year-badge {
-    font-size: clamp(3.5rem, 14vw, 6rem);
-  }
-
-  .stat-row { display: none; }
-
-  .panel-right {
-    padding: 32px 20px 40px;
-    justify-content: flex-start;
-  }
-
-  .house-grid {
-    max-width: 100%;
-  }
-}
-
+════════════════════════════════════════ */
 @media (max-width: 480px) {
-  .house-grid { grid-template-columns: 1fr; }
-  .main-title { font-size: 1.65rem; }
+  body           { padding: 32px 16px 40px; }
+  .school-logo   { width: 64px; height: 64px; }
+  .zone-a        { padding-bottom: 28px; }
+  .zone-b        { padding: 22px 18px 20px; border-radius: 20px; }
+  .house-card    { padding: 18px 16px 14px; }
+  .house-name    { font-size: 1.05rem; }
+  .house-icon    { width: 36px; height: 36px; margin-bottom: 12px; }
 }
 
-/* ── Reduced motion ── */
+@media (max-width: 340px) {
+  .house-grid { grid-template-columns: 1fr; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .house-card, .house-card::before,
   .house-icon, .house-arrow,
-  .house-name, .house-cue { transition: none; }
+  .house-name, .footer-dot { transition: none; animation: none; }
 }
 
 </style>
 </head>
 <body>
 
-<div class="shell">
+  <!-- ══ ZONE A — Identity, floating on photo ══ -->
+  <div class="zone-a">
 
-  <!-- ════ LEFT PANEL ════ -->
-  <div class="panel-left">
+    <img
+      class="school-logo"
+      src="{{ url_for('static', filename='logo.png') }}"
+      alt="Sandeepani Vidya Nikethan"
+      onerror="this.style.display='none'"
+    >
 
-   <!-- Logo -->
-    <div class="logo-block">
-      <div class="logo-mark">
-        <img src="static/logo.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: inherit;">
-      </div>
-
-      <div class="logo-text">
-        <span class="logo-name">Sandeepani Vidya Nikethan</span>
-        <span class="logo-tagline">A venture of Thiruvambadi Devaswom</span>
-      </div>
+    <div class="school-name-wrap">
+      <span class="rule"></span>
+      <span class="school-name">Sandeepani Vidya Nikethan</span>
+      <span class="rule"></span>
     </div>
 
-    <!-- Identity -->
-    <div class="identity">
-      <div class="eyebrow">
-        <span class="eyebrow-line"></span>
-        <span class="eyebrow-text">Official Election Portal</span>
-      </div>
+    <h1 class="portal-title">Student Council<br>Election Portal</h1>
+    <p class="portal-year">Academic Year 2026</p>
 
-      <h1 class="main-title">Student&nbsp;Council<br>Election</h1>
-      <div class="year-badge" aria-hidden="true">2026</div>
+  </div>
 
-    </div>
+  <!-- ══ ZONE B — Glass house card panel ══ -->
+  <div class="zone-b">
 
-    <div style="width: 100%; border-top: 1px solid rgba(15,23,42,0.1); padding-top: 20px;"></div>
-    <!-- Footer -->
-    <div class="panel-footer">
-      <span class="footer-institution">Sandeepani Vidya Nikethan</span>
-      <span class="footer-year">© 2026</span>
-    </div>
-
-  </div><!-- /panel-left -->
-
-
-  <!-- ════ RIGHT PANEL ════ -->
-  <div class="panel-right">
-
-    <div class="select-prompt">
-      <p class="prompt-label">Select your house to vote</p>
-      <p class="prompt-sub">Choose the house you belong to and proceed</p>
+    <div class="grid-label">
+      <span class="grid-label-text">Choose your house to vote</span>
     </div>
 
     <div class="house-grid">
@@ -615,23 +427,19 @@ body::before {
            aria-label="Vote as Agni house"
            onclick="selectHouse('agni')"
            onkeydown="if(event.key==='Enter'||event.key===' ')selectHouse('agni')">
-
         <div class="house-icon">
-          <!-- Flame icon -->
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 20 20" fill="none">
             <path d="M10 17c-3.866 0-7-2.91-7-6.5 0-2.5 1.5-4.5 3-5.5
                      0 2 1 3 2 3-1-3 1-6 4-7-1 3 1.5 4.5 1.5 6.5
                      1-1 1-2.5 1-3.5 2 1.5 2.5 4 2.5 5.5C17 14.09 13.866 17 10 17Z"
-                  stroke="#64748b" stroke-width="1.4" stroke-linejoin="round"/>
+                  stroke-width="1.4" stroke-linejoin="round"/>
           </svg>
         </div>
-
         <div class="house-name">Agni</div>
-        <div class="house-cue">Fire · Strength</div>
-
+        <div class="house-element">Fire · Strength</div>
         <div class="house-arrow">
-          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 14 14" fill="none">
+            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
@@ -642,21 +450,17 @@ body::before {
            aria-label="Vote as Jalam house"
            onclick="selectHouse('jalam')"
            onkeydown="if(event.key==='Enter'||event.key===' ')selectHouse('jalam')">
-
         <div class="house-icon">
-          <!-- Drop icon -->
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 20 20" fill="none">
             <path d="M10 3C10 3 4 9 4 13a6 6 0 0012 0c0-4-6-10-6-10Z"
-                  stroke="#64748b" stroke-width="1.4" stroke-linejoin="round"/>
+                  stroke-width="1.4" stroke-linejoin="round"/>
           </svg>
         </div>
-
         <div class="house-name">Jalam</div>
-        <div class="house-cue">Water · Wisdom</div>
-
+        <div class="house-element">Water · Wisdom</div>
         <div class="house-arrow">
-          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 14 14" fill="none">
+            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
@@ -667,23 +471,17 @@ body::before {
            aria-label="Vote as Vayu house"
            onclick="selectHouse('vayu')"
            onkeydown="if(event.key==='Enter'||event.key===' ')selectHouse('vayu')">
-
         <div class="house-icon">
-          <!-- Wind icon -->
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 8h9a3 3 0 100-6" stroke="#64748b" stroke-width="1.4"
-                  stroke-linecap="round"/>
-            <path d="M3 12h11a3 3 0 110 6" stroke="#64748b" stroke-width="1.4"
-                  stroke-linecap="round"/>
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M3 8h9a3 3 0 100-6"  stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M3 12h11a3 3 0 110 6" stroke-width="1.4" stroke-linecap="round"/>
           </svg>
         </div>
-
         <div class="house-name">Vayu</div>
-        <div class="house-cue">Air · Agility</div>
-
+        <div class="house-element">Air · Agility</div>
         <div class="house-arrow">
-          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 14 14" fill="none">
+            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
@@ -694,32 +492,30 @@ body::before {
            aria-label="Vote as Prithvi house"
            onclick="selectHouse('prithvi')"
            onkeydown="if(event.key==='Enter'||event.key===' ')selectHouse('prithvi')">
-
         <div class="house-icon">
-          <!-- Leaf icon -->
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5 17c0 0 2-9 10-11-8 3-8 8-8 8"
-                  stroke="#64748b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M5 17c4-4 7-6 10-11" stroke="#64748b" stroke-width="1.4"
-                  stroke-linecap="round"/>
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M5 17c0 0 2-9 10-11-8 3-8 8-8 8" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 17c4-4 7-6 10-11"              stroke-width="1.4" stroke-linecap="round"/>
           </svg>
         </div>
-
         <div class="house-name">Prithvi</div>
-        <div class="house-cue">Earth · Unity</div>
-
+        <div class="house-element">Earth · Unity</div>
         <div class="house-arrow">
-          <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg viewBox="0 0 14 14" fill="none">
+            <path d="M3 7h8M8 4l3 3-3 3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
       </div>
 
     </div><!-- /house-grid -->
 
-  </div><!-- /panel-right -->
+    <!-- Footer strip inside the glass panel -->
+    <div class="zone-b-footer">
+      <span class="footer-dot" aria-hidden="true"></span>
+      <span class="footer-text">Sandeepani Vidya Nikethan &nbsp;·&nbsp; Election Active</span>
+    </div>
 
-</div><!-- /shell -->
+  </div><!-- /zone-b -->
 
 <script>
 function selectHouse(house) {

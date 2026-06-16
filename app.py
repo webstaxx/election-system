@@ -1,11 +1,26 @@
-from flask import Flask, render_template
 from waitress import serve
+
+from flask import (
+    Flask,
+    render_template,
+    request,
+    session,
+    redirect,
+    url_for
+)
+
+from datetime import timedelta
 
 from extensions import db
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "change-this-later"
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(
+    minutes=5
+)
+
+ADMIN_PASSWORD = "Election2026!"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     "sqlite:///election.db"
@@ -33,11 +48,77 @@ app.register_blueprint(
     api_bp,
     url_prefix="/api"
 )
-
 app.register_blueprint(
     admin_bp,
     url_prefix="/admin"
 )
+
+# ================
+# Password Protected Admin routes
+# =================
+
+@app.route(
+    "/admin-login",
+    methods=["GET", "POST"]
+)
+def admin_login():
+
+    if request.method == "POST":
+
+        password = request.form.get(
+            "password"
+        )
+
+        if password == ADMIN_PASSWORD:
+
+            session.permanent = True
+            session["admin"] = True
+
+            return redirect(
+                "/admin"
+            )
+
+        return render_template(
+            "admin_login.html",
+            error="Invalid Password"
+        )
+
+    return render_template(
+        "admin_login.html"
+    )
+
+@app.route("/logout")
+def logout():
+
+    session.clear()
+
+    return redirect("/")
+
+@app.route("/admin")
+def admin_panel():
+
+    if not session.get("admin"):
+        return redirect(
+            "/admin-login"
+        )
+
+    return render_template(
+        "admin.html"
+    )
+
+@app.route("/results-page")
+def results_page():
+
+    if not session.get("admin"):
+        return redirect(
+            "/admin-login"
+        )
+
+    return render_template(
+        "results.html"
+    )
+
+# =========================
 
 app.register_blueprint(
     voting_bp,
@@ -61,20 +142,6 @@ def init_db():
     db.create_all()
 
     return "Database Created"
-
-@app.route("/admin")
-def admin_panel():
-
-    return render_template(
-        "admin.html"
-    )
-
-@app.route("/results-page")
-def results_page():
-
-    return render_template(
-        "results.html"
-    )
 
 @app.route("/student")
 def student():

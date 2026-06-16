@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    background-image:
+        url('{{ url_for("static", filename="school.jpg") }}');
+
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    position:relative;
+}
+
+body::before{
+
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,0.25),
+            rgba(255,255,255,0.08)
+        );
+
+    backdrop-filter:blur(6px);
+}
+
+.login-card{
+
+    position:relative;
+    z-index:1;
+
+    width:100%;
+    max-width:450px;
+
+    padding:40px;
+
+    border-radius:24px;
+
+    background:
+        rgba(255,255,255,0.72);
+
+    backdrop-filter:
+        blur(25px);
+
+    border:
+        1px solid rgba(
+            255,
+            255,
+            255,
+            0.6
+        );
+
+    box-shadow:
+        0 20px 60px rgba(
+            0,
+            0,
+            0,
+            0.15
+        );
+
+    text-align:center;
+}
+
+.logo{
+
+    width:90px;
+    height:90px;
+
+    margin:0 auto 20px;
+
+    border-radius:50%;
+
+    background:
+        rgba(255,255,255,0.8);
+
+    border:
+        2px dashed #94a3b8;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#64748b;
+    font-size:.85rem;
+    font-weight:700;
+}
+
+h1{
+
+    font-size:2rem;
+    font-weight:800;
+
+    color:#0f172a;
+
+    margin-bottom:8px;
+}
+
+.subtitle{
+
+    color:#475569;
+
+    margin-bottom:30px;
+
+    font-size:0.95rem;
+}
+
+.input-group{
+
+    margin-bottom:18px;
+}
+
+input{
+
+    width:100%;
+
+    padding:14px 16px;
+
+    border-radius:14px;
+
+    border:
+        1px solid #cbd5e1;
+
+    outline:none;
+
+    font-size:1rem;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.8
+        );
+
+    transition:0.2s;
+}
+
+input:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 4px rgba(
+            37,
+            99,
+            235,
+            0.12
+        );
+}
+
+.login-btn{
+
+    width:100%;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:1rem;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.login-btn:hover{
+
+    background:#1d4ed8;
+
+    transform:
+        translateY(-1px);
+}
+
+.error{
+
+    margin-top:15px;
+
+    color:#dc2626;
+
+    font-weight:600;
+
+    font-size:0.9rem;
+}
+
+.footer{
+
+    margin-top:25px;
+
+    color:#64748b;
+
+    font-size:0.85rem;
+
+    font-weight:600;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <div class="logo">
+        <img style="height: 91px; width: 91px;" src="static/logo.png">
+    </div>
+
+    <h1>Admin Portal</h1>
+
+    <p class="subtitle">
+        Student Council Election System
+    </p>
+
+    <form method="POST">
+
+        <div class="input-group">
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter Admin Password"
+                required
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="login-btn">
+
+            Login
+
+        </button>
+
+    </form>
+
+    {% if error %}
+
+    <div class="error">
+        {{ error }}
+    </div>
+
+    {% endif %}
+
+    <div class="footer">
+        Sandeepani Vidya Nikethan
+    </div>
+
+</div>
+
+</body>
+</html>
