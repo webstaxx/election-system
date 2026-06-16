@@ -624,19 +624,27 @@ body {
   .post-controls { flex-direction: column; }
 }
 
+.emoji-reset {
+        color: initial !important;
+        -webkit-text-fill-color: initial !important; /* Forces the color back if webkit filters are on */
+        display: inline-block;
+    }
 </style>
 </head>
 <body>
 
 <div id="dashboard-view" class="page">
 
-    <div class="hero">
-        <div>
-            <h1>🖲️ School Election</h1>
-            <p class="subtitle">Admin Dashboardd</p>
-        </div>
-        <div id="dashboardStatusBadge">Loading...</div>
-    </div>
+  <div class="hero">
+      <div>
+      <h1> 
+          <span class="emoji-reset">🖲️</span> 
+          School Election
+      </h1>
+          <p class="subtitle">Admin Dashboard</p>
+      </div>
+      <div id="dashboardStatusBadge">Loading...</div>
+  </div>
 
     <div class="main-actions">
         <button class="main-action manage-btn" onclick="showView('editor')">
