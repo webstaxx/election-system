@@ -1,6 +1,9 @@
 from flask import Blueprint, jsonify, request
 from sqlalchemy import func
 
+from werkzeug.utils import secure_filename
+import os
+
 from extensions import db
 from models import (
     Post,
@@ -113,6 +116,7 @@ def get_candidates(post_id):
         {
             "id": candidate.id,
             "name": candidate.name,
+            "photo": candidate.photo,
             "active": candidate.active
         }
         for candidate in candidates
@@ -215,6 +219,72 @@ def delete_candidate(candidate_id):
 
     return jsonify({
         "success": True
+    })
+
+# =======================
+# CANDIDATE PHOTO
+# =======================
+
+@admin_bp.route(
+    "/candidate/<int:candidate_id>/photo",
+    methods=["POST"]
+)
+def upload_candidate_photo(candidate_id):
+
+    candidate = Candidate.query.get(
+        candidate_id
+    )
+
+    if not candidate:
+        return jsonify({
+            "success": False,
+            "message": "Candidate not found"
+        }), 404
+
+    if "photo" not in request.files:
+
+        return jsonify({
+            "success": False,
+            "message": "No file uploaded"
+        }), 400
+
+    file = request.files["photo"]
+
+    if file.filename == "":
+
+        return jsonify({
+            "success": False,
+            "message": "No file selected"
+        }), 400
+
+    ext = os.path.splitext(
+        secure_filename(
+            file.filename
+        )
+    )[1]
+
+    filename = (
+        f"candidate_{candidate.id}"
+        f"{ext}"
+    )
+
+    save_path = os.path.join(
+        "static",
+        "candidates",
+        filename
+    )
+
+    file.save(save_path)
+
+    candidate.photo = (
+        f"candidates/{filename}"
+    )
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "photo": candidate.photo
     })
 
 #=========================================
